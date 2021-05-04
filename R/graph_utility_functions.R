@@ -14,8 +14,6 @@
 #'
 #' @examples
 to_undirected_edges <- function(data, from, to) {
-#  require(dplyr)
-#  require(tidyr)
 
   data %>%
     dplyr::mutate(group_column  =  ifelse(.data[[from]] < .data[[to]], paste(.data[[to]], .data[[from]]),
@@ -44,8 +42,6 @@ to_undirected_edges <- function(data, from, to) {
 #'
 #' @examples
 get_top_by_column <- function(graph, column, n = 5) {
-#  require(igraph)
-#  require(dplyr)
 
   igraph::as_data_frame(graph, what = "vertices") %>%
   dplyr::select(dplyr::all_of(column), dplyr::everything()) %>%
@@ -62,7 +58,7 @@ get_top_by_column <- function(graph, column, n = 5) {
 #' @param vertices List of strings representing vertices ids in graph
 #' @param n_steps An int representing number of steps away from 'vertices'
 #'
-#' @return Igraph object with 'vertices' and 'n_step' neighburs
+#' @return Igraph object with 'vertices' and 'n_step' neighbours
 #' @export
 #'
 #' @examples

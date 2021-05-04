@@ -9,8 +9,6 @@
 #'
 #' @examples
 ideation_signature <- function(graph, weights = "weights") {
-#  require(igraph)
-
   1 - igraph::constraint(graph, nodes = igraph::V(graph),
                      weights = igraph::edge_attr(graph, weights))
 }

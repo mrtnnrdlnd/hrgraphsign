@@ -1,5 +1,4 @@
 ---
-title: "hrgraphsign"
 output:
   github_document:
     fig_width: 12
@@ -9,14 +8,24 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-### Libraries
-```{r, warning = FALSE, message = FALSE}
+
+```{r, warning = FALSE, message = FALSE, echo = FALSE}
 library(magrittr)
-library(igraph)
-library(knitr)
-library(hrgraphsign)
 ```
 
+# hrgraphsign
+```
+Simplifies analysis of hr-graph data based on a number of signatures
+from this article: https://hbr.org/2018/11/better-people-analytics
+
+```
+
+## Installation
+```
+devtools::install_github("mrtnnrdlnd/hrgraphsign")
+```
+
+## Example
 
 ### Import Data
 ```{r, warning = FALSE, message = FALSE}
@@ -28,40 +37,40 @@ edges <- readxl::read_excel("example/edges.xlsx")
 
 ```{r, warning = FALSE, message = FALSE}
 example_graph <- edges %>% 
-  to_undirected_edges("FromID", "ToID") %>% 
-  graph_from_data_frame(directed = FALSE, vertices = nodes)
+  hrgraphsign::to_undirected_edges("FromID", "ToID") %>% 
+  igraph::graph_from_data_frame(directed = FALSE, vertices = nodes)
 ```
 
 ### Set Weights
 
 ```{r, warning = FALSE, message = FALSE}
-E(example_graph)$weights <- E(example_graph)$edge_count
+igraph::E(example_graph)$weights <- igraph::E(example_graph)$edge_count
 ```
 
 ### Ideation Signature
 ```{r, warning = FALSE, message = FALSE}
-V(example_graph)$ideation <- ideation_signature(example_graph)
+igraph::V(example_graph)$ideation <- hrgraphsign::ideation_signature(example_graph)
 ```
 
 ### Display top 10 
 ```{r, warning = FALSE, message = FALSE}
-knitr::kable(get_top_by_column(example_graph, column = "ideation", n = 10))
+knitr::kable(hrgraphsign::get_top_by_column(example_graph, column = "ideation", n = 10))
 ```
 
 ### Plot graph
 
 ```{r, warning = FALSE, message = FALSE}
-plot_graph(example_graph, 
-           edge_width_by = "edge_count", 
-           vertex_color_by = "department",
-           vertex_size_by = "ideation")
+example_graph %>% 
+  hrgraphsign::plot_graph(edge_width_by = "edge_count",
+                          vertex_color_by = "department",
+                          vertex_size_by = "ideation")
 ```
 
 ### Plot friends_friends
 
 ```{r, warning = FALSE, message = FALSE}
-plot_graph(friends_friends(example_graph, 11, 3),
-           edge_width_by = "edge_count", 
-           vertex_color_by = "department",
-           vertex_size_by = "ideation")
+hrgraphsign::friends_friends(example_graph, 11, 3) %>% 
+  hrgraphsign::plot_graph(edge_width_by = "edge_count",
+                          vertex_color_by = "department",
+                          vertex_size_by = "ideation")
 ```

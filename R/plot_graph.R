@@ -15,10 +15,6 @@
 plot_graph <- function(graph, edge_width_by = "weights",
                        vertex_color_by = NULL,
                        vertex_size_by = NULL) {
-#  require(igraph)
-#  require(dplyr)
-#  require(RColorBrewer)
-#  require(BBmisc)
 
   edge_width <- igraph::edge_attr(graph, edge_width_by)
 
