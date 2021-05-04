@@ -4,11 +4,11 @@
 #' number of occurances per undirected edge.
 #'
 #' @param data A data.frame containing two columns representing edges of a graph
-#' @param from A string that specifies column associated with 'from' ids
-#' @param to A string that specifies column associated with "to" ids
+#' @param from A string that specifies column associated with \code{from} ids
+#' @param to A string that specifies column associated with \code{to} ids
 #'
 #' @return data.frame with single row per edge of undirected graph with extra
-#'   column, 'edge_count', representing number of occurances
+#'   column, \code{edge_count}, representing number of occurances
 #' @export
 #' @importFrom dplyr %>% .data
 #'
@@ -30,14 +30,14 @@ to_undirected_edges <- function(data, from, to) {
 
 #' Get top rows by column
 #'
-#' Extract top 'n' rows from graphs vertices based on
-#' value from 'column'
+#' Extract top \code{n} rows from graphs vertices based on
+#' value from \code{column}
 #'
 #' @param graph Igraph object
 #' @param column A string that specifies column for top values
-#' @param n An int that specifies number of rows
+#' @param n A number that specifies number of rows
 #'
-#' @return data.frame constisting of top values of 'column' with 'n' rows
+#' @return data.frame consisting of top values of \code{column} with \code{n} rows
 #' @export
 #'
 #' @examples
@@ -52,7 +52,7 @@ get_top_by_column <- function(graph, column, n = 5) {
 #' Friends friends subgraph
 #'
 #' Create a subgraph from a graph with vertices surrounding
-#' input vertices with neighbouring vertices n_steps away.
+#' input \code{vertices} with neighbouring vertices \code{n_steps} away.
 #'
 #' @param graph Igraph object
 #' @param vertices List of strings representing vertices ids in graph

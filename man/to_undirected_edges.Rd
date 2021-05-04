@@ -9,13 +9,13 @@ to_undirected_edges(data, from, to)
 \arguments{
 \item{data}{A data.frame containing two columns representing edges of a graph}
 
-\item{from}{A string that specifies column associated with 'from' ids}
+\item{from}{A string that specifies column associated with \code{from} ids}
 
-\item{to}{A string that specifies column associated with "to" ids}
+\item{to}{A string that specifies column associated with \code{to} ids}
 }
 \value{
 data.frame with single row per edge of undirected graph with extra
-  column, 'edge_count', representing number of occurances
+  column, \code{edge_count}, representing number of occurances
 }
 \description{
 Convert edge data to undirected edge data and count

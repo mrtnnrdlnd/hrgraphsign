@@ -4,9 +4,9 @@
 #' style based on graph attributes.
 #'
 #' @param graph Graph to plot
-#' @param edge_width_by A string that sets width of edge based on value from column in E(graph)
-#' @param vertex_color_by A string that sets color vertex  based on value from column in V(graph)
-#' @param vertex_size_by A string that sets size of vertex based on value from column in V(graph)
+#' @param edge_width_by A string that sets width of edge based on value from attribute in graph edges
+#' @param vertex_color_by A string that sets color vertex  based on value from attribute in graph vertices
+#' @param vertex_size_by A string that sets size of vertex based on value from attribute in graph vertices
 #'
 #' @return Plotted graph
 #' @export

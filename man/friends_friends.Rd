@@ -14,7 +14,7 @@ friends_friends(graph, vertices, n_steps)
 \item{n_steps}{An int representing number of steps away from 'vertices'}
 }
 \value{
-Igraph object with 'vertices' and 'n_step' neighburs
+Igraph object with 'vertices' and 'n_step' neighbours
 }
 \description{
 Create a subgraph from a graph with vertices surrounding
