@@ -1,0 +1,67 @@
+---
+title: "Team Rocket"
+output:
+  github_document:
+    fig_width: 12
+    fig_height: 10
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+### Libraries
+```{r, warning = FALSE, message = FALSE}
+library(magrittr)
+library(igraph)
+library(knitr)
+library(hrgraphsign)
+```
+
+
+### Import Data
+```{r, warning = FALSE, message = FALSE}
+nodes <- readxl::read_excel("example/nodes.xlsx")
+edges <- readxl::read_excel("example/edges.xlsx")
+```
+
+### Create Graph
+
+```{r, warning = FALSE, message = FALSE}
+example_graph <- edges %>% 
+  to_undirected_edges("FromID", "ToID") %>% 
+  graph_from_data_frame(directed = FALSE, vertices = nodes)
+```
+
+### Set Weights
+
+```{r, warning = FALSE, message = FALSE}
+E(example_graph)$weights <- E(example_graph)$edge_count
+```
+
+### Ideation Signature
+```{r, warning = FALSE, message = FALSE}
+V(example_graph)$ideation <- ideation_signature(example_graph)
+```
+
+### Display top 10 
+```{r, warning = FALSE, message = FALSE}
+knitr::kable(get_top_by_column(example_graph, column = "ideation", n = 10))
+```
+
+### Plot graph
+
+```{r, warning = FALSE, message = FALSE}
+plot_graph(example_graph, 
+           edge_width_by = "edge_count", 
+           vertex_color_by = "department",
+           vertex_size_by = "ideation")
+```
+
+### Plot friends_friends
+
+```{r, warning = FALSE, message = FALSE}
+plot_graph(friends_friends(example_graph, 6, 2),
+           edge_width_by = "edge_count", 
+           vertex_color_by = "department",
+           vertex_size_by = "ideation")
+```
