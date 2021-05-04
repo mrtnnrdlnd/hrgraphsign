@@ -59,7 +59,7 @@ get_top_by_column <- function(graph, column, n = 5) {
 #' input vertices with neighbouring vertices n_steps away.
 #'
 #' @param graph Igraph object
-#' @param vertices List of ...
+#' @param vertices List of strings representing vertices ids in graph
 #' @param n_steps An int representing number of steps away from 'vertices'
 #'
 #' @return Igraph object with 'vertices' and 'n_step' neighburs
