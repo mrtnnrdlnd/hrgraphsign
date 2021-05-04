@@ -4,8 +4,8 @@
 #' number of occurances per undirected edge.
 #'
 #' @param data A data.frame containing two columns representing edges of a graph
-#' @param from A string, specifies column with 'from' ids
-#' @param to A string, specifies column with "to" ids
+#' @param from A string that specifies column associated with 'from' ids
+#' @param to A string that specifies column associated with "to" ids
 #'
 #' @return data.frame with single row per edge of undirected graph with extra
 #'   column, 'edge_count', representing number of occurances
@@ -36,8 +36,8 @@ to_undirected_edges <- function(data, from, to) {
 #' value from 'column'
 #'
 #' @param graph Igraph object
-#' @param column A string, specifies column for top values
-#' @param n An int, specifies number of rows
+#' @param column A string that specifies column for top values
+#' @param n An int that specifies number of rows
 #'
 #' @return data.frame constisting of top values of 'column' with 'n' rows
 #' @export

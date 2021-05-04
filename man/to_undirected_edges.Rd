@@ -9,9 +9,9 @@ to_undirected_edges(data, from, to)
 \arguments{
 \item{data}{A data.frame containing two columns representing edges of a graph}
 
-\item{from}{A string, specifies column with 'from' ids}
+\item{from}{A string that specifies column associated with 'from' ids}
 
-\item{to}{A string, specifies column with "to" ids}
+\item{to}{A string that specifies column associated with "to" ids}
 }
 \value{
 data.frame with single row per edge of undirected graph with extra

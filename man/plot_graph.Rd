@@ -14,11 +14,11 @@ plot_graph(
 \arguments{
 \item{graph}{Graph to plot}
 
-\item{edge_width_by}{A string, sets width of edge based on value from column in E(graph)}
+\item{edge_width_by}{A string that sets width of edge based on value from column in E(graph)}
 
-\item{vertex_color_by}{A string, sets color vertex  based on value from column in V(graph)}
+\item{vertex_color_by}{A string that sets color vertex  based on value from column in V(graph)}
 
-\item{vertex_size_by}{A string, size of vertex based on value from column in V(graph)}
+\item{vertex_size_by}{A string that sets size of vertex based on value from column in V(graph)}
 }
 \value{
 Plotted graph

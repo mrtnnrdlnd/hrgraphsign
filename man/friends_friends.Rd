@@ -9,7 +9,7 @@ friends_friends(graph, vertices, n_steps)
 \arguments{
 \item{graph}{Igraph object}
 
-\item{vertices}{List of ...}
+\item{vertices}{List of strings representing vertices ids in graph}
 
 \item{n_steps}{An int representing number of steps away from 'vertices'}
 }

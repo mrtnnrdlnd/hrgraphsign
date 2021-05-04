@@ -9,7 +9,7 @@ ideation_signature(graph, weights = "weights")
 \arguments{
 \item{graph}{Graph to analyze}
 
-\item{weights}{A string, specifies column representing weights of the graph}
+\item{weights}{A string that specifies column representing weights of the graph}
 }
 \value{
 Igraph column with values of ideation

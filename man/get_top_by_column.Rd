@@ -9,9 +9,9 @@ get_top_by_column(graph, column, n = 5)
 \arguments{
 \item{graph}{Igraph object}
 
-\item{column}{A string, specifies column for top values}
+\item{column}{A string that specifies column for top values}
 
-\item{n}{An int, specifies number of rows}
+\item{n}{An int that specifies number of rows}
 }
 \value{
 data.frame constisting of top values of 'column' with 'n' rows
