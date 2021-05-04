@@ -70,7 +70,7 @@ plot_graph(example_graph,
 ### Plot friends\_friends
 
 ``` r
-plot_graph(friends_friends(example_graph, 6, 2),
+plot_graph(friends_friends(example_graph, 11, 3),
            edge_width_by = "edge_count", 
            vertex_color_by = "department",
            vertex_size_by = "ideation")
