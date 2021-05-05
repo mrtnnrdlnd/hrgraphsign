@@ -14,7 +14,8 @@
 #' @examples
 plot_graph <- function(graph, edge_width_by = "weights",
                        vertex_color_by = NULL,
-                       vertex_size_by = NULL) {
+                       vertex_size_by = NULL,
+                       main = NULL) {
 
   edge_width <- igraph::edge_attr(graph, edge_width_by)
 
@@ -31,14 +32,14 @@ plot_graph <- function(graph, edge_width_by = "weights",
   } else {vertex_color <- "gray"}
 
   if (!is.null(vertex_size_by)) {
-    vertex_size_normalized <- igraph::vertex_attr(graph, vertex_size_by) %>%
-      BBmisc::normalize(method = "range", range = c(0, 1))
-    vertex_size <- ifelse(!is.na(vertex_size_normalized), (13 + 12 * vertex_size_normalized^4), 13)
+    vertex_size_normalized <- igraph::vertex_attr(graph, vertex_size_by)
+    vertex_size <- ifelse(!is.na(vertex_size_normalized), (10 + 2 * vertex_size_normalized), 10)
   } else {vertex_size <- 13}
 
   plot(graph,
        edge.width = edge_width,
        vertex.color = vertex_color,
-       vertex.size = vertex_size
+       vertex.size = vertex_size,
+       main = main
   )
 }
