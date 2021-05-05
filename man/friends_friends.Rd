@@ -18,5 +18,5 @@ Igraph object with 'vertices' and 'n_step' neighbours
 }
 \description{
 Create a subgraph from a graph with vertices surrounding
-input vertices with neighbouring vertices n_steps away.
+input \code{vertices} with neighbouring vertices \code{n_steps} away.
 }

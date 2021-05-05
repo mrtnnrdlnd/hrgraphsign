@@ -45,16 +45,16 @@ knitr::kable(hrgraphsign::get_top_by_column(example_graph, column = "ideation", 
 
 |     |  ideation | name | firstName | lastName | title | department  | employmentYear |
 |:----|----------:|:-----|:----------|:---------|:------|:------------|---------------:|
-| 11  | 0.7200000 | 11   | klaes     | klurig   | NA    | Engineering |           2019 |
-| 18  | 0.7200000 | 18   | rejdun    | rasande  | NA    | Engineering |           2018 |
-| 10  | 0.6666667 | 10   | jenny     | jungola  | NA    | Sales       |           2019 |
-| 16  | 0.6666667 | 16   | patrik    | park     | NA    | Engineering |           2019 |
-| 25  | 0.6666667 | 25   | yngve     | ylle     | NA    | Marketing   |           2011 |
-| 22  | 0.6641667 | 22   | vira      | vonka    | NA    | Marketing   |           2014 |
-| 28  | 0.6463889 | 28   | ängbert   | ärlig    | NA    | Marketing   |           2011 |
-| 8   | 0.6250000 | 8    | hans      | hurtig   | NA    | Sales       |           2017 |
-| 13  | 0.6250000 | 13   | martin    | mustig   | NA    | Engineering |           2017 |
-| 19  | 0.6250000 | 19   | sara      | sommar   | NA    | Engineering |           2010 |
+| 11  | 10.000000 | 11   | klaes     | klurig   | NA    | Engineering |           2019 |
+| 18  | 10.000000 | 18   | rejdun    | rasande  | NA    | Engineering |           2018 |
+| 10  |  6.000000 | 10   | jenny     | jungola  | NA    | Sales       |           2019 |
+| 16  |  6.000000 | 16   | patrik    | park     | NA    | Engineering |           2019 |
+| 25  |  6.000000 | 25   | yngve     | ylle     | NA    | Marketing   |           2011 |
+| 22  |  5.889571 | 22   | vira      | vonka    | NA    | Marketing   |           2014 |
+| 28  |  5.207957 | 28   | ängbert   | ärlig    | NA    | Marketing   |           2011 |
+| 8   |  4.571429 | 8    | hans      | hurtig   | NA    | Sales       |           2017 |
+| 13  |  4.571429 | 13   | martin    | mustig   | NA    | Engineering |           2017 |
+| 19  |  4.571429 | 19   | sara      | sommar   | NA    | Engineering |           2010 |
 
 ### Plot graph
 

@@ -11,12 +11,12 @@ get_top_by_column(graph, column, n = 5)
 
 \item{column}{A string that specifies column for top values}
 
-\item{n}{An int that specifies number of rows}
+\item{n}{A number that specifies number of rows}
 }
 \value{
-data.frame constisting of top values of 'column' with 'n' rows
+data.frame consisting of top values of \code{column} with \code{n} rows
 }
 \description{
-Extract top 'n' rows from graphs vertices based on
-value from 'column'
+Extract top \code{n} rows from graphs vertices based on
+value from \code{column}
 }
