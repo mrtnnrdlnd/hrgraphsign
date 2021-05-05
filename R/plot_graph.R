@@ -20,21 +20,13 @@ plot_graph <- function(graph, edge_width_by = "weights",
   edge_width <- igraph::edge_attr(graph, edge_width_by)
 
   if (!is.null(vertex_color_by)) {
-    color_palette <- vertex_color_by %>%
-      unique()  %>%
-      length()  %>%
-      RColorBrewer::brewer.pal("Set3")
-
-    vertex_color <- color_palette[
-      igraph::vertex_attr(graph, vertex_color_by) %>%
-        as.factor()
-    ]
+    vertex_color <- vertices_colors(graph, vertex_color_by)
   } else {vertex_color <- "gray"}
 
   if (!is.null(vertex_size_by)) {
-    vertex_size_normalized <- igraph::vertex_attr(graph, vertex_size_by)
-    vertex_size <- ifelse(!is.na(vertex_size_normalized), (10 + 2 * vertex_size_normalized), 10)
-  } else {vertex_size <- 13}
+    vertex_size <- vertices_sizes(graph, vertex_size_by)
+  } else {vertex_size <- 10}
+
 
   plot(graph,
        edge.width = edge_width,
@@ -42,4 +34,44 @@ plot_graph <- function(graph, edge_width_by = "weights",
        vertex.size = vertex_size,
        main = main
   )
+}
+
+#' Title
+#'
+#' @param graph Graph to plot
+#' @param attribute A string representing vertex attribute to set color by
+#' @param palette A string representing ColorBrewer palette
+#' @param default_color
+#'
+#' @return List of colors for the vertices
+#' @export
+#'
+#' @examples
+vertices_colors <- function(graph, attribute, palette = "Set3", default_color = "gray") {
+    vertices_attribute_values <- igraph::vertex_attr(graph, attribute)
+    color_palette <- vertices_attribute_values %>%
+      unique()  %>%
+      length()  %>%
+      RColorBrewer::brewer.pal(palette)
+
+    color_palette[vertices_attribute_values %>% as.factor()]
+}
+
+#' Title
+#'
+#' @param graph Graph to plot
+#' @param attribute A string representing vertex attribute to set color by
+#' @param default_size A number representing size of 0 or NA values
+#' @param scale_factor A number to scale attribute value by
+#'
+#' @return List of sizes for the vertices
+#' @export
+#'
+#' @examples
+vertices_sizes <- function(graph, attribute, default_size = 12, scale_factor = 1.5) {
+    vertices_attribute_values <- igraph::vertex_attr(graph, attribute)
+    vertex_size <- ifelse(!is.na(vertices_attribute_values),
+                          (default_size + scale_factor * vertices_attribute_values),
+                          default_size
+    )
 }

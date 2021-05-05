@@ -9,7 +9,7 @@
 #'
 #' @examples
 ideation_signature <- function(graph, weights = "weights") {
-  1/graph %>%
+  1 / graph %>%
     igraph::constraint(nodes = igraph::V(graph),
                        weights = igraph::edge_attr(graph, weights)) %>%
     BBmisc::normalize(method = "range", range = c(0.1, 1))
