@@ -4,7 +4,7 @@
 \alias{ideation_signature}
 \title{Extract ideation signature}
 \usage{
-ideation_signature(graph, weights = "weights")
+ideation_signature(graph, weights = NULL)
 }
 \arguments{
 \item{graph}{Graph to analyze}
@@ -12,7 +12,7 @@ ideation_signature(graph, weights = "weights")
 \item{weights}{A string that specifies attribute representing weights of the graph}
 }
 \value{
-Igraph column with values of ideation
+Igraph column with values of ideation on a scale from 1 to 10
 }
 \description{
 Extract ideation signature

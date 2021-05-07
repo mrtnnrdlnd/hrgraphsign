@@ -14,8 +14,7 @@
 #' @examples
 plot_graph <- function(graph, edge_width_by = "weights",
                        vertex_color_by = NULL,
-                       vertex_size_by = NULL,
-                       main = NULL) {
+                       vertex_size_by = NULL) {
 
   edge_width <- igraph::edge_attr(graph, edge_width_by)
 
@@ -32,7 +31,6 @@ plot_graph <- function(graph, edge_width_by = "weights",
        edge.width = edge_width,
        vertex.color = vertex_color,
        vertex.size = vertex_size,
-       main = main
   )
 }
 
@@ -41,13 +39,12 @@ plot_graph <- function(graph, edge_width_by = "weights",
 #' @param graph Graph to plot
 #' @param attribute A string representing vertex attribute to set color by
 #' @param palette A string representing ColorBrewer palette
-#' @param default_color
 #'
 #' @return List of colors for the vertices
 #' @export
 #'
 #' @examples
-vertices_colors <- function(graph, attribute, palette = "Set3", default_color = "gray") {
+vertices_colors <- function(graph, attribute, palette = "Set3") {
     vertices_attribute_values <- igraph::vertex_attr(graph, attribute)
     color_palette <- vertices_attribute_values %>%
       unique()  %>%

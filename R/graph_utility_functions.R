@@ -1,34 +1,20 @@
-#' Edge data to undirected
+#' Graph To Undirected
 #'
-#' Convert edge data to undirected edge data and count
-#' number of occurances per undirected edge.
+#' @param graph Graph to make undirected
 #'
-#' @param data A data.frame containing two columns representing edges of a graph
-#' @param from A string that specifies column associated with \code{from} ids
-#' @param to A string that specifies column associated with \code{to} ids
-#'
-#' @return data.frame with single row per edge of undirected graph with extra
-#'   column, \code{edge_count}, representing number of occurances
+#' @return Undirected graph
 #' @export
-#' @importFrom dplyr %>% .data
 #'
 #' @examples
-to_undirected_edges <- function(data, from, to) {
-
-  data %>%
-    dplyr::mutate(group_column  =  ifelse(.data[[from]] < .data[[to]], paste(.data[[to]], .data[[from]]),
-                                   ifelse(.data[[from]] > .data[[to]], paste(.data[[from]], .data[[to]]), NA))) %>%
-    dplyr::group_by(group_column) %>%
-    dplyr::mutate(edge_count = dplyr::n()) %>%
-    dplyr::distinct(group_column, .keep_all = TRUE) %>%
-    tidyr::drop_na(group_column) %>%
-    dplyr::ungroup() %>%
-    dplyr::select(-group_column) %>%
-    dplyr::select(dplyr::all_of(from), dplyr::all_of(to), dplyr::everything())
+aggregate_edges <- function(graph) {
+  igraph::E(graph)$weights <- igraph::count_multiple(graph)
+  graph <- igraph::simplify(graph, remove.loops = TRUE, edge.attr.comb = "first")
+  return(graph)
 }
 
 
-#' Get top rows by column
+
+#' Get Top Rows By Column
 #'
 #' Extract top \code{n} rows from graphs vertices based on
 #' value from \code{column}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/graph_utility_functions.R
 \name{get_top_by_column}
 \alias{get_top_by_column}
-\title{Get top rows by column}
+\title{Get Top Rows By Column}
 \usage{
 get_top_by_column(graph, column, n = 5)
 }

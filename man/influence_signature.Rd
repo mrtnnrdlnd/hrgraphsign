@@ -4,7 +4,7 @@
 \alias{influence_signature}
 \title{Extract influence signature}
 \usage{
-influence_signature(graph, weights = "weights")
+influence_signature(graph, weights = NULL)
 }
 \arguments{
 \item{graph}{Graph to analyze}
@@ -12,8 +12,8 @@ influence_signature(graph, weights = "weights")
 \item{weights}{A string that specifies attribute representing weights of the graph}
 }
 \value{
-Igraph column with values of influence
+Igraph column with values of influence on a scale from 1 to 10
 }
 \description{
-Extract influence signature
+This is a fishy implementation of influence
 }

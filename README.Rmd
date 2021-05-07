@@ -28,28 +28,36 @@ devtools::install_github("mrtnnrdlnd/hrgraphsign")
 ## Example
 
 ### Import Data
+
 ```{r, warning = FALSE, message = FALSE}
 nodes <- readxl::read_excel("example/nodes.xlsx")
+knitr::kable(nodes %>% head(5))
+```
+
+```{r, warning = FALSE, message = FALSE}
 edges <- readxl::read_excel("example/edges.xlsx")
+knitr::kable(edges %>% head(5))
 ```
 
 ### Create Graph
 
 ```{r, warning = FALSE, message = FALSE}
 example_graph <- edges %>% 
-  hrgraphsign::to_undirected_edges("FromID", "ToID") %>% 
-  igraph::graph_from_data_frame(directed = FALSE, vertices = nodes)
-```
-
-### Set Weights
-
-```{r, warning = FALSE, message = FALSE}
-igraph::E(example_graph)$weights <- igraph::E(example_graph)$edge_count
+  dplyr::select(FromID, ToID) %>%
+  igraph::graph_from_data_frame(directed = FALSE, vertices = nodes) %>% 
+  hrgraphsign::aggregate_edges()
 ```
 
 ### Ideation Signature
+Predicts, according to the article, which employees will come up with good ideas
 ```{r, warning = FALSE, message = FALSE}
 igraph::V(example_graph)$ideation <- hrgraphsign::ideation_signature(example_graph)
+```
+
+### Influence Signature
+Predicts, according to the article, Which employees will change others’ behavior
+```{r, warning = FALSE, message = FALSE}
+igraph::V(example_graph)$influence <- hrgraphsign::influence_signature(example_graph)
 ```
 
 ### Display top 10 
@@ -60,17 +68,45 @@ knitr::kable(hrgraphsign::get_top_by_column(example_graph, column = "ideation", 
 ### Plot graph
 
 ```{r, warning = FALSE, message = FALSE}
-example_graph %>% 
-  hrgraphsign::plot_graph(edge_width_by = "edge_count",
-                          vertex_color_by = "department",
-                          vertex_size_by = "ideation")
+set.seed(5)
+layout1 <- igraph::layout.fruchterman.reingold(example_graph)
+par(mfrow = c(1,2))
+plot(example_graph,
+     edge.width = igraph::E(example_graph)$weights,
+     vertex.color = hrgraphsign::vertices_colors(example_graph, attribute = "department"),
+     vertex.size = hrgraphsign::vertices_sizes(example_graph, attribute = "ideation"),
+     main = "Ideation",
+     layout = layout1
+     )
+plot(example_graph,
+     edge.width = igraph::E(example_graph)$weights,
+     vertex.color = hrgraphsign::vertices_colors(example_graph, attribute = "department"),
+     vertex.size = hrgraphsign::vertices_sizes(example_graph, attribute = "influence"),
+     main = "Influence",
+     layout = layout1
+)
 ```
 
 ### Plot friends_friends
 
 ```{r, warning = FALSE, message = FALSE}
-hrgraphsign::friends_friends(example_graph, 11, 3) %>% 
-  hrgraphsign::plot_graph(edge_width_by = "edge_count",
-                          vertex_color_by = "department",
-                          vertex_size_by = "ideation")
+
+par(mfrow = c(1,2))
+subgraph <- hrgraphsign::friends_friends(example_graph, 13, 2)
+set.seed(10)
+layout2 <- igraph::layout.fruchterman.reingold(subgraph)
+  plot(subgraph,
+       edge.width = igraph::E(example_graph)$weights,
+       vertex.color = hrgraphsign::vertices_colors(subgraph, attribute = "department"),
+       vertex.size = hrgraphsign::vertices_sizes(subgraph, attribute = "ideation"),
+       main = "Ideation",
+       layout = layout2
+  )
+  plot(subgraph,
+       edge.width = igraph::E(example_graph)$weights,
+       vertex.color = hrgraphsign::vertices_colors(subgraph, attribute = "department"),
+       vertex.size = hrgraphsign::vertices_sizes(subgraph, attribute = "influence"),
+       main = "Influence",
+       layout = layout2
+  )
 ```

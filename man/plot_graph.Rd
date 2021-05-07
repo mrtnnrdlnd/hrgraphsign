@@ -8,8 +8,7 @@ plot_graph(
   graph,
   edge_width_by = "weights",
   vertex_color_by = NULL,
-  vertex_size_by = NULL,
-  main = NULL
+  vertex_size_by = NULL
 )
 }
 \arguments{
