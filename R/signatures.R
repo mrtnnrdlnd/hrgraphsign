@@ -13,7 +13,8 @@ ideation_signature <- function(graph, weights = NULL) {
   1 / graph %>%
     igraph::constraint(nodes = igraph::V(graph),
                        weights = weights) %>%
-    BBmisc::normalize(method = "range", range = c(0.1, 1))
+    BBmisc::normalize(method = "range", range = c(0.1, 1)) %>%
+    ifelse(is.na(.), 1, .)
 }
 
 #' Extract influence signature
