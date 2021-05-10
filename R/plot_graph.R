@@ -38,20 +38,33 @@ plot_graph <- function(graph, edge_width_by = "weights",
 #'
 #' @param graph Graph to plot
 #' @param attribute A string representing vertex attribute to set color by
+#' @param continuous A boolean representing if attribute is continuous or not
 #' @param palette A string representing ColorBrewer palette
 #'
 #' @return List of colors for the vertices
 #' @export
 #'
 #' @examples
-vertices_colors <- function(graph, attribute, palette = "Set3") {
+vertices_colors <- function(graph,
+                            attribute,
+                            continuous = is.numeric(igraph::vertex_attr(graph, attribute)),
+                            palette = ifelse(continuous, "Blues", "Set3")) {
+
     vertices_attribute_values <- igraph::vertex_attr(graph, attribute)
     color_palette <- vertices_attribute_values %>%
       unique()  %>%
       length()  %>%
+      ifelse(. > 9, 9, .) %>%
       RColorBrewer::brewer.pal(palette)
 
-    color_palette[vertices_attribute_values %>% as.factor()]
+    if (continuous) {
+      color_palette <- colorRampPalette(color_palette)
+      order <- findInterval(vertices_attribute_values,
+                            sort(vertices_attribute_values))
+      color_palette(length(vertices_attribute_values))[order]
+    } else {
+      color_palette[vertices_attribute_values %>% as.factor()]
+    }
 }
 
 #' Title
