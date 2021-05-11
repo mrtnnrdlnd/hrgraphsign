@@ -78,7 +78,12 @@ example_graph <- edges %>%
 #### Ideation Signature
 
 Predicts, according to the article, which employees will come up with
-good ideas
+good ideas.
+
+The ideation signature is measured by having a low value of something
+called Burt’s constraint, named after Ronald Stuart Burt. It looks at
+how widespread connections and how much connections to different groups
+you have.
 
 ``` r
 # Get ideation measure
@@ -97,6 +102,10 @@ knitr::kable(hrgraphsign::get_top_by_column(example_graph, column = "ideation", 
 
 Predicts, according to the article, Which employees will change others’
 behavior
+
+Measures how connected connections an employee has.
+
+Note: Implementation is vague
 
 ``` r
 # Get influence measure
@@ -156,50 +165,9 @@ team_graph <- example_graph %>%
 team_efficiency <- hrgraphsign::efficiency_signature(example_graph, team_graph)
 ```
 
-### Display top 10
+### Misc
 
-``` r
-knitr::kable(hrgraphsign::get_top_by_column(example_graph, column = "ideation", n = 10))
-```
-
-|     |  ideation | name | firstName | lastName | title | department  | employmentYear | influence |
-|:----|----------:|:-----|:----------|:---------|:------|:------------|---------------:|----------:|
-| 17  | 10.000000 | 17   | quentin   | quitter  | NA    | Engineering |           2018 |  3.947061 |
-| 21  |  6.611570 | 21   | urban     | undilat  | NA    | Marketing   |           2017 |  6.066019 |
-| 13  |  6.400000 | 13   | martin    | mustig   | NA    | Engineering |           2017 |  7.768433 |
-| 15  |  6.400000 | 15   | olof      | otur     | NA    | Engineering |           2018 |  6.668358 |
-| 27  |  6.400000 | 27   | åvald     | åker     | NA    | Marketing   |           2015 |  2.817219 |
-| 24  |  5.874853 | 24   | xenon     | xor      | NA    | Marketing   |           2012 |  7.259042 |
-| 9   |  5.507745 | 9    | ior       | icke     | NA    | Sales       |           2013 |  3.738459 |
-| 19  |  4.750515 | 19   | sara      | sommar   | NA    | Engineering |           2010 | 10.000000 |
-| 8   |  4.000000 | 8    | hans      | hurtig   | NA    | Sales       |           2017 |  1.046659 |
-| 11  |  4.000000 | 11   | klaes     | klurig   | NA    | Engineering |           2019 |  1.592476 |
-
-### Plot graph
-
-``` r
-set.seed(5)
-layout1 <- igraph::layout.fruchterman.reingold(example_graph)
-par(mfrow = c(1,2))
-plot(example_graph,
-     edge.width = igraph::E(example_graph)$weights,
-     vertex.color = hrgraphsign::vertices_colors(example_graph, attribute = "department"),
-     vertex.size = hrgraphsign::vertices_sizes(example_graph, attribute = "ideation"),
-     main = "Ideation",
-     layout = layout1
-     )
-plot(example_graph,
-     edge.width = igraph::E(example_graph)$weights,
-     vertex.color = hrgraphsign::vertices_colors(example_graph, attribute = "department"),
-     vertex.size = hrgraphsign::vertices_sizes(example_graph, attribute = "influence"),
-     main = "Influence",
-     layout = layout1
-)
-```
-
-![](README_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
-
-### Plot friends\_friends
+#### Plot friends\_friends
 
 ``` r
 par(mfrow = c(1,2))
@@ -222,4 +190,4 @@ layout2 <- igraph::layout.fruchterman.reingold(subgraph)
   )
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
