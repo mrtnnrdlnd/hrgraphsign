@@ -1,0 +1,33 @@
+---
+title: "the_making_of"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{the_making_of}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(hrgraphsign)
+```
+
+## Introduction
+
+
+
+## Way of working
+agilt
+
+
+## The Good
+
+## The Bad
+
+## Could be done

@@ -46,3 +46,25 @@ influence_signature <- function(graph, weights = NULL) {
   (graph_betweeness * graph_eigen_centrality) %>%
     BBmisc::normalize(method = "range", range = c(1, 10))
 }
+
+
+#' Extract efficiency signature
+#'
+#' @param graph Graph where team is part of
+#' @param team_graph Subgraph with only team members
+#' @param weights A string that specifies attribute representing weights of the graph
+#'
+#' @return A number representing an efficiency
+#' @export
+#'
+#' @examples
+efficiency_signature <- function(graph, team_graph, weights = NULL) {
+
+  external_range <-
+    friends_friends(graph, igraph::V(team_graph)$name, 3) %>%
+    igraph::induced_subgraph(., igraph::V(.)[!(igraph::V(.)$name %in% igraph::V(team_graph)$name)]) %>%
+    igraph::vcount()
+
+  external_range * igraph::graph.density(team_graph)
+
+}

@@ -4,12 +4,19 @@
 \alias{vertices_colors}
 \title{Title}
 \usage{
-vertices_colors(graph, attribute, palette = "Set3")
+vertices_colors(
+  graph,
+  attribute,
+  continuous = is.numeric(igraph::vertex_attr(graph, attribute)),
+  palette = ifelse(continuous, "Blues", "Set3")
+)
 }
 \arguments{
 \item{graph}{Graph to plot}
 
 \item{attribute}{A string representing vertex attribute to set color by}
+
+\item{continuous}{A boolean representing if attribute is continuous or not}
 
 \item{palette}{A string representing ColorBrewer palette}
 }
