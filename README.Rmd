@@ -74,7 +74,10 @@ example_graph <- edges %>%
 ### Individual level
 
 #### Ideation Signature
-Predicts, according to the article, which employees will come up with good ideas
+Predicts, according to the article, which employees will come up with good ideas.
+
+The ideation signature is measured by having a low value of something called Burt's constraint, named after Ronald Stuart Burt. It looks at how widespread connections and how much connections to different groups you have.
+
 ```{r, warning = FALSE, message = FALSE}
 # Get ideation measure
 igraph::V(example_graph)$ideation <- hrgraphsign::ideation_signature(example_graph)
@@ -84,6 +87,12 @@ knitr::kable(hrgraphsign::get_top_by_column(example_graph, column = "ideation", 
 
 #### Influence Signature
 Predicts, according to the article, Which employees will change others’ behavior
+
+Measures how connected connections an employee has.
+
+Note: Implementation is vague
+
+
 ```{r, warning = FALSE, message = FALSE}
 # Get influence measure
 igraph::V(example_graph)$influence <- hrgraphsign::influence_signature(example_graph)
@@ -129,34 +138,11 @@ team_efficiency <- hrgraphsign::efficiency_signature(example_graph, team_graph)
 ```
 
 
-### Display top 10 
-```{r, warning = FALSE, message = FALSE}
-knitr::kable(hrgraphsign::get_top_by_column(example_graph, column = "ideation", n = 10))
-```
 
-### Plot graph
 
-```{r, warning = FALSE, message = FALSE}
-set.seed(5)
-layout1 <- igraph::layout.fruchterman.reingold(example_graph)
-par(mfrow = c(1,2))
-plot(example_graph,
-     edge.width = igraph::E(example_graph)$weights,
-     vertex.color = hrgraphsign::vertices_colors(example_graph, attribute = "department"),
-     vertex.size = hrgraphsign::vertices_sizes(example_graph, attribute = "ideation"),
-     main = "Ideation",
-     layout = layout1
-     )
-plot(example_graph,
-     edge.width = igraph::E(example_graph)$weights,
-     vertex.color = hrgraphsign::vertices_colors(example_graph, attribute = "department"),
-     vertex.size = hrgraphsign::vertices_sizes(example_graph, attribute = "influence"),
-     main = "Influence",
-     layout = layout1
-)
-```
+### Misc 
 
-### Plot friends_friends
+#### Plot friends_friends
 
 ```{r, warning = FALSE, message = FALSE}
 
