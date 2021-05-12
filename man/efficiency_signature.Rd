@@ -4,7 +4,7 @@
 \alias{efficiency_signature}
 \title{Extract efficiency signature}
 \usage{
-efficiency_signature(graph, team_graph, weights = NULL)
+efficiency_signature(graph, team_graph, weights = NULL, range_param = 3)
 }
 \arguments{
 \item{graph}{Graph where team is part of}

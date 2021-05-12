@@ -83,7 +83,7 @@ good ideas.
 The ideation signature is measured by having a low value of something
 called Burt’s constraint, named after Ronald Stuart Burt. It looks at
 how widespread connections and how much connections to different groups
-you have.
+a person has.
 
 ``` r
 # Get ideation measure
@@ -103,7 +103,7 @@ knitr::kable(hrgraphsign::get_top_by_column(example_graph, column = "ideation", 
 Predicts, according to the article, Which employees will change others’
 behavior
 
-Measures how connected connections an employee has.
+Measures how connected connections a person has.
 
 Note: Implementation is vague
 

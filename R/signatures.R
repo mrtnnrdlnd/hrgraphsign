@@ -58,10 +58,10 @@ influence_signature <- function(graph, weights = NULL) {
 #' @export
 #'
 #' @examples
-efficiency_signature <- function(graph, team_graph, weights = NULL) {
+efficiency_signature <- function(graph, team_graph, weights = NULL, range_param = 3) {
 
   external_range <-
-    friends_friends(graph, igraph::V(team_graph)$name, 3) %>%
+    friends_friends(graph, igraph::V(team_graph)$name, range_param) %>%
     igraph::induced_subgraph(., igraph::V(.)[!(igraph::V(.)$name %in% igraph::V(team_graph)$name)]) %>%
     igraph::vcount()
 

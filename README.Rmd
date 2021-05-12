@@ -76,7 +76,7 @@ example_graph <- edges %>%
 #### Ideation Signature
 Predicts, according to the article, which employees will come up with good ideas.
 
-The ideation signature is measured by having a low value of something called Burt's constraint, named after Ronald Stuart Burt. It looks at how widespread connections and how much connections to different groups you have.
+The ideation signature is measured by having a low value of something called Burt's constraint, named after Ronald Stuart Burt. It looks at how widespread connections and how much connections to different groups a person has.
 
 ```{r, warning = FALSE, message = FALSE}
 # Get ideation measure
@@ -88,7 +88,7 @@ knitr::kable(hrgraphsign::get_top_by_column(example_graph, column = "ideation", 
 #### Influence Signature
 Predicts, according to the article, Which employees will change others’ behavior
 
-Measures how connected connections an employee has.
+Measures how connected connections a person has.
 
 Note: Implementation is vague
 
@@ -134,7 +134,7 @@ In the implementation here it is assumed that the number of vertices connected t
 team_graph <- example_graph %>%
   igraph::induced_subgraph(., igraph::V(.)[igraph::V(.)$department == "Engineering"])
 # Get measure
-team_efficiency <- hrgraphsign::efficiency_signature(example_graph, team_graph)
+hrgraphsign::efficiency_signature(example_graph, team_graph)
 ```
 
 
