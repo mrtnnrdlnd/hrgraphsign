@@ -52,19 +52,40 @@ influence_signature <- function(graph, weights = NULL) {
 #'
 #' @param graph Graph where team is part of
 #' @param team_graph Subgraph with only team members
-#' @param weights A string that specifies attribute representing weights of the graph
+#' @param range_param A number representing how many steps away from team_graph to look, defaults to 2
 #'
-#' @return A number representing an efficiency
+#' @return A number representing efficiency score of team_graph
 #' @export
 #'
 #' @examples
-efficiency_signature <- function(graph, team_graph, weights = NULL, range_param = 3) {
+efficiency_signature <- function(graph, team_graph, range_param = 2) {
 
   external_range <-
+    (friends_friends(graph, igraph::V(team_graph)$name, range_param) %>%
+       igraph::delete_vertices(., igraph::V(team_graph)$name) %>%
+       igraph::components(.))$no
+
+  external_range / igraph::vcount(team_graph) * igraph::graph.density(team_graph)
+}
+
+
+#' Extract innovation signature
+#'
+#' @param graph Graph where team is part of
+#' @param team_graph Subgraph with only team members
+#' @param range_param A number representing how many steps away from team_graph to look, defaults to 2
+#'
+#' @return A number representing innovation score of team_graph
+#' @export
+#'
+#' @examples
+innovation_signature <- function(graph, team_graph, range_param = 2) {
+
+  islands <-
     friends_friends(graph, igraph::V(team_graph)$name, range_param) %>%
-    igraph::induced_subgraph(., igraph::V(.)[!(igraph::V(.)$name %in% igraph::V(team_graph)$name)]) %>%
-    igraph::vcount()
+       igraph::delete_edges(., igraph::V(team_graph)$name)
 
-  external_range * igraph::graph.density(team_graph)
+  external_range <- igraph::components(islands)$no * (igraph::vcount(islands) - igraph::vcount(team_graph))
 
+  external_range / igraph::vcount(team_graph) / igraph::graph.density(team_graph)
 }
