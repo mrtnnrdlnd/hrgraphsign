@@ -162,8 +162,10 @@ external range.
 team_graph <- example_graph %>%
   igraph::induced_subgraph(., igraph::V(.)[igraph::V(.)$department == "Engineering"])
 # Get measure
-team_efficiency <- hrgraphsign::efficiency_signature(example_graph, team_graph)
+hrgraphsign::efficiency_signature(example_graph, team_graph)
 ```
+
+    ## [1] 0.04888889
 
 ### Misc
 

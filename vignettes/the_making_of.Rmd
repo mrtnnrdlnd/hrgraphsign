@@ -19,8 +19,7 @@ library(hrgraphsign)
 ```
 
 ## Introduction
-
-
+This package is the result of a 10 week project during an internship? (LIA) at Ericsson.
 
 ## Way of working
 Have been under scrum management with sprints sized at 1 week. 
@@ -28,7 +27,7 @@ Daily scrum meetings at 09:30 everyday.
 
 
 ## The Good
+Time boxing
 
 ## The Bad
 
-## Could be done
