@@ -89,3 +89,22 @@ innovation_signature <- function(graph, team_graph, range_param = 2) {
 
   external_range / igraph::vcount(team_graph) / igraph::graph.density(team_graph)
 }
+
+#' Extract silo signature
+#'
+#' This function is igraph::modularity renamed + default membership set to cluster_fast_greedy
+#'
+#' @param graph The input graph.
+#' @param membership Numeric vector, for each vertex it gives its community. The communities are numbered from one.
+#' @param weights If not NULL then a numeric vector giving edge weights.
+#'
+#' @return Silo signature measure (aka modularity)
+#' @export
+#'
+#' @examples
+silo_signature <- function(graph,
+                           membership = igraph::cluster_fast_greedy(igraph::as.undirected(subgraphene))$membership,
+                           weights = NULL) {
+
+  igraph::modularity(graph, factor(membership))
+}

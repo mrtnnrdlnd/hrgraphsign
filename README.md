@@ -81,9 +81,9 @@ Predicts, according to the article, which employees will come up with
 good ideas.
 
 The ideation signature is measured by having a low value of something
-called Burt’s constraint, named after Ronald Stuart Burt. It looks at
-how widespread connections and how much connections to different groups
-a person has.
+called **Burt’s constraint**, named after Ronald Stuart Burt. It looks
+at how widespread connections and how much connections to different
+groups a person has.
 
 ``` r
 # Get ideation measure
@@ -144,28 +144,72 @@ plot(example_graph,
 
 ![](README_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
-### Efficiency signature
+### Team Level
+
+``` r
+# Create subgraph for teams to measure
+teams <- c("Engineering", "Marketing", "Sales")
+
+engineering_team <- example_graph %>%
+  igraph::induced_subgraph(., igraph::V(.)[igraph::V(.)$department == "Engineering"])
+marketing_team <- example_graph %>%
+  igraph::induced_subgraph(., igraph::V(.)[igraph::V(.)$department == "Marketing"])
+sales_team <- example_graph %>%
+  igraph::induced_subgraph(., igraph::V(.)[igraph::V(.)$department == "Sales"])
+```
+
+#### Efficiency Signature
 
 Predicts, according to the article, Which teams will complete projects
 on time.
 
-The efficiency signature is a combination of a team with high cohesion,
-or density, and at the same time have high external range which means
-having members that are well connected outside the team.
-
-In the implementation here it is assumed that the number of vertices
-connected to the team, up to three steps away, is an okey measure of
-external range.
+The efficiency signature is a combination of a team with **high
+density**, and at the same time have **high external range** which means
+having members that are well connected to different sources outside the
+team.
 
 ``` r
-# Create subgraph for efficiency measure
-team_graph <- example_graph %>%
-  igraph::induced_subgraph(., igraph::V(.)[igraph::V(.)$department == "Engineering"])
 # Get measure
-hrgraphsign::efficiency_signature(example_graph, team_graph)
+efficiency <- c(
+  hrgraphsign::efficiency_signature(example_graph, engineering_team),
+  hrgraphsign::efficiency_signature(example_graph, marketing_team),
+  hrgraphsign::efficiency_signature(example_graph, sales_team)
+)
+
+knitr::kable(data.frame(teams, efficiency))
 ```
 
-    ## [1] 0.04888889
+| teams       | efficiency |
+|:------------|-----------:|
+| Engineering |  0.0488889 |
+| Marketing   |  0.0355556 |
+| Sales       |  0.0222222 |
+
+### Innovation Signature
+
+Predicts, according to the article, Which teams will innovate
+effectively.
+
+The innovation signature is a combination of a team with **low density**
+and at the same time have **high external range** or **wide, diverse
+connections**.
+
+``` r
+# Get measure
+innovation <- c(
+  hrgraphsign::innovation_signature(example_graph, engineering_team),
+  hrgraphsign::innovation_signature(example_graph, marketing_team),
+  hrgraphsign::innovation_signature(example_graph, sales_team)
+)
+
+knitr::kable(data.frame(teams, efficiency, innovation))
+```
+
+| teams       | efficiency | innovation |
+|:------------|-----------:|-----------:|
+| Engineering |  0.0488889 |   21.27273 |
+| Marketing   |  0.0355556 |    1.96875 |
+| Sales       |  0.0222222 |   27.00000 |
 
 ### Misc
 
@@ -192,4 +236,4 @@ layout2 <- igraph::layout.fruchterman.reingold(subgraph)
   )
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
