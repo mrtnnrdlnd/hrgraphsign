@@ -245,24 +245,13 @@ hrgraphsign::silo_signature(example_graph, igraph::V(example_graph)$department)
 #### Plot friends\_friends
 
 ``` r
-par(mfrow = c(1,2))
 subgraph <- hrgraphsign::friends_friends(example_graph, 13, 2)
-set.seed(10)
-layout2 <- igraph::layout.fruchterman.reingold(subgraph)
-  plot(subgraph,
-       edge.width = igraph::E(example_graph)$weights,
-       vertex.color = hrgraphsign::vertices_colors(subgraph, attribute = "department"),
-       vertex.size = hrgraphsign::vertices_sizes(subgraph, attribute = "ideation"),
-       main = "Ideation",
-       layout = layout2
-  )
-  plot(subgraph,
-       edge.width = igraph::E(example_graph)$weights,
-       vertex.color = hrgraphsign::vertices_colors(subgraph, attribute = "department"),
-       vertex.size = hrgraphsign::vertices_sizes(subgraph, attribute = "influence"),
-       main = "Influence",
-       layout = layout2
-  )
+set.seed(5)
+ggraph(subgraph, layout = 'fr') + 
+    geom_edge_link(show.legend = FALSE, alpha = 0.8) + 
+    geom_node_point(aes(colour = department), size = 8, alpha = 0.8, show.legend = TRUE) + 
+    theme_graph(foreground = 'steelblue', fg_text_colour = 'white') +
+    geom_node_text(aes(label = name))
 ```
 
 ![](README_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
