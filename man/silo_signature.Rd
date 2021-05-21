@@ -6,8 +6,7 @@
 \usage{
 silo_signature(
   graph,
- 
-    membership = igraph::cluster_fast_greedy(igraph::as.undirected(subgraphene))$membership,
+  membership = igraph::cluster_fast_greedy(igraph::as.undirected(graph))$membership,
   weights = NULL
 )
 }

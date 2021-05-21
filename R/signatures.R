@@ -103,7 +103,7 @@ innovation_signature <- function(graph, team_graph, range_param = 2) {
 #'
 #' @examples
 silo_signature <- function(graph,
-                           membership = igraph::cluster_fast_greedy(igraph::as.undirected(subgraphene))$membership,
+                           membership = igraph::cluster_fast_greedy(igraph::as.undirected(graph))$membership,
                            weights = NULL) {
 
   igraph::modularity(graph, factor(membership))

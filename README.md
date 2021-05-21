@@ -27,7 +27,7 @@ article and so they will be here. They are, in order of appearance:
 5.  **Silo Signature** - Organizational level measure
 6.  **Vulnerability Signature** Organizational level measure
 
-## The Signatures by example
+## The Signatures By Example
 
 Before getting to the actual signatures we load some example data and
 create a connected network from it
@@ -73,7 +73,7 @@ example_graph <- edges %>%
   hrgraphsign::aggregate_edges()
 ```
 
-### Individual level
+### Individual Level
 
 #### Ideation Signature
 
@@ -124,22 +124,26 @@ knitr::kable(hrgraphsign::get_top_by_column(example_graph, column = "influence",
 
 ``` r
 set.seed(5)
-layout1 <- igraph::layout.fruchterman.reingold(example_graph)
-par(mfrow = c(1,2))
-plot(example_graph,
-     edge.width = igraph::E(example_graph)$weights,
-     vertex.color = hrgraphsign::vertices_colors(example_graph, attribute = "department"),
-     vertex.size = hrgraphsign::vertices_sizes(example_graph, attribute = "ideation"),
-     main = "Ideation",
-     layout = layout1
-     )
-plot(example_graph,
-     edge.width = igraph::E(example_graph)$weights,
-     vertex.color = hrgraphsign::vertices_colors(example_graph, attribute = "department"),
-     vertex.size = hrgraphsign::vertices_sizes(example_graph, attribute = "influence"),
-     main = "Influence",
-     layout = layout1
-)
+ideation_plot <- ggraph(example_graph, layout = 'fr') + 
+  geom_edge_link(show.legend = FALSE, alpha = 0.8) + 
+  geom_node_point(aes(colour = ideation, size = ideation), alpha = 0.8, show.legend = FALSE) + 
+  theme_graph(foreground = 'steelblue', fg_text_colour = 'white') + 
+  scale_colour_gradient(low = "black", high = "purple") +
+  ggtitle("Ideation") + 
+  geom_node_label(aes(label = firstName, filter = ideation == max(ideation)), color = 'black', 
+                 size = 4, alpha = 0.6)
+
+set.seed(5)
+influence_plot <- ggraph(example_graph, layout = 'fr') + 
+  geom_edge_link(show.legend = FALSE, alpha = 0.8) + 
+  geom_node_point(aes(colour = influence, size = influence), alpha = 0.8, show.legend = FALSE) +
+  theme_graph(foreground = 'steelblue', fg_text_colour = 'white') +
+  scale_colour_gradient(low = "black", high = "green") +
+  ggtitle("Influence") +
+  geom_node_label(aes(label = firstName, filter = influence == max(influence)), color = 'black', 
+                 size = 4, alpha = 0.6)
+
+ideation_plot + influence_plot
 ```
 
 ![](README_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
@@ -169,7 +173,7 @@ having members that are well connected to different sources outside the
 team.
 
 ``` r
-# Get measure
+# Get measures
 efficiency <- c(
   hrgraphsign::efficiency_signature(example_graph, engineering_team),
   hrgraphsign::efficiency_signature(example_graph, marketing_team),
@@ -185,7 +189,7 @@ knitr::kable(data.frame(teams, efficiency))
 | Marketing   |  0.0355556 |
 | Sales       |  0.0222222 |
 
-### Innovation Signature
+#### Innovation Signature
 
 Predicts, according to the article, Which teams will innovate
 effectively.
@@ -195,7 +199,7 @@ and at the same time have **high external range** or **wide, diverse
 connections**.
 
 ``` r
-# Get measure
+# Get measures
 innovation <- c(
   hrgraphsign::innovation_signature(example_graph, engineering_team),
   hrgraphsign::innovation_signature(example_graph, marketing_team),
@@ -210,6 +214,31 @@ knitr::kable(data.frame(teams, efficiency, innovation))
 | Engineering |  0.0488889 |   21.27273 |
 | Marketing   |  0.0355556 |    1.96875 |
 | Sales       |  0.0222222 |   27.00000 |
+
+#### Comparison
+
+``` r
+set.seed(5)
+ggraph(example_graph, layout = 'fr') + 
+    geom_edge_link(show.legend = FALSE, alpha = 0.8) + 
+    geom_node_point(aes(colour = department), size = 8, alpha = 0.8, show.legend = TRUE) + 
+    theme_graph(foreground = 'steelblue', fg_text_colour = 'white')
+```
+
+![](README_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+
+### Organizational Level
+
+#### Silo Signature
+
+Predicts, according to article, Whether an organization is siloed.
+
+``` r
+# Get measure
+hrgraphsign::silo_signature(example_graph, igraph::V(example_graph)$department)
+```
+
+    ## [1] 0.4354912
 
 ### Misc
 
@@ -236,4 +265,4 @@ layout2 <- igraph::layout.fruchterman.reingold(subgraph)
   )
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
