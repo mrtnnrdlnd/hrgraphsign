@@ -185,7 +185,8 @@ set.seed(5)
 ggraph(example_graph, layout = 'fr') + 
     geom_edge_link(show.legend = FALSE, alpha = 0.8) + 
     geom_node_point(aes(colour = department), size = 8, alpha = 0.8, show.legend = TRUE) + 
-    theme_graph(foreground = 'steelblue', fg_text_colour = 'white')
+    theme_graph(foreground = 'steelblue', fg_text_colour = 'white') +
+    geom_node_text(aes(label = name))
 
 ```
 

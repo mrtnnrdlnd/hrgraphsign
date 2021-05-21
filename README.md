@@ -222,7 +222,8 @@ set.seed(5)
 ggraph(example_graph, layout = 'fr') + 
     geom_edge_link(show.legend = FALSE, alpha = 0.8) + 
     geom_node_point(aes(colour = department), size = 8, alpha = 0.8, show.legend = TRUE) + 
-    theme_graph(foreground = 'steelblue', fg_text_colour = 'white')
+    theme_graph(foreground = 'steelblue', fg_text_colour = 'white') +
+    geom_node_text(aes(label = name))
 ```
 
 ![](README_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
@@ -245,7 +246,8 @@ hrgraphsign::silo_signature(example_graph, igraph::V(example_graph)$department)
 #### Plot friends\_friends
 
 ``` r
-subgraph <- hrgraphsign::friends_friends(example_graph, 13, 2)
+# Make a subgraph of vertice 13 and neighburs 2 steps away
+subgraph <- hrgraphsign::friends_friends(example_graph, vertices = 13, n_steps = 2)
 set.seed(5)
 ggraph(subgraph, layout = 'fr') + 
     geom_edge_link(show.legend = FALSE, alpha = 0.8) + 
