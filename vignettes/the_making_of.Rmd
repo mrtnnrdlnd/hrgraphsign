@@ -1,0 +1,40 @@
+---
+title: "the_making_of"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{the_making_of}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(hrgraphsign)
+```
+
+## Introduction
+This package is the result of a 10 week project during an internship? (LIA) at Ericsson.
+
+## Way of working
+Have been under scrum management with sprints sized at 1 week. 
+Daily scrum meetings at 09:30 everyday.
+
+
+## The Good
+Time boxing
+
+## The Bad
+One person project
+
+## Retrospektive sprint 5
+
+## The Good
+
+## The Bad
+

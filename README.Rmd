@@ -1,8 +1,8 @@
 ---
 output:
   github_document:
-    fig_width: 12
-    fig_height: 10
+    fig_width: 9
+    fig_height: 6
 ---
 
 ```{r setup, include=FALSE}
@@ -11,11 +11,14 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r, warning = FALSE, message = FALSE, echo = FALSE}
 library(magrittr)
+library(ggraph)
+library(tidygraph)
+library(patchwork)
 ```
 
 # hrgraphsign
 ```
-Simplifies analysis of hr-graph data based on a number of signatures
+Simplifies analysis of hr-graph data based on the six signatures
 from this article: https://hbr.org/2018/11/better-people-analytics
 
 ```
@@ -25,17 +28,40 @@ from this article: https://hbr.org/2018/11/better-people-analytics
 devtools::install_github("mrtnnrdlnd/hrgraphsign")
 ```
 
-## Example
+## Background
+There are measures of employees performance which can't be measured in isolation.
+Six of these measures are mentioned in the article: 
 
-### Import Data
+> **Better People Analytics**
+> Measure who they know, not just who they are. **by Paul Leonardi and Noshir Contractor**
+
+This package is an attempt to make these six measures a little easier to use in practice.
+The measures is referred to as signatures in the article and so they will be here.
+They are, in order of appearance:
+
+1. **Ideation Signature** - Individual level measure
+2. **Influence Signature** - Individual level measure
+3. **Efficiency Signature** - Team level measure
+4. **innovation Signature** - Team level measure
+5. **Silo Signature** - Organizational level measure
+6. **Vulnerability Signature** Organizational level measure
+
+## The Signatures By Example
+Before getting to the actual signatures we load some example data and create a connected network from it
+
+### Example Data
 
 ```{r, warning = FALSE, message = FALSE}
+# nodes will be representing the employees
 nodes <- readxl::read_excel("example/nodes.xlsx")
+# Look at data
 knitr::kable(nodes %>% head(5))
 ```
 
 ```{r, warning = FALSE, message = FALSE}
+# edges will be representing the relations between the employees
 edges <- readxl::read_excel("example/edges.xlsx")
+# Look at data
 knitr::kable(edges %>% head(5))
 ```
 
@@ -43,70 +69,149 @@ knitr::kable(edges %>% head(5))
 
 ```{r, warning = FALSE, message = FALSE}
 example_graph <- edges %>% 
-  dplyr::select(FromID, ToID) %>%
+  dplyr::select(FromID, ToID, everything()) %>%
   igraph::graph_from_data_frame(directed = FALSE, vertices = nodes) %>% 
   hrgraphsign::aggregate_edges()
 ```
 
-### Ideation Signature
-Predicts, according to the article, which employees will come up with good ideas
+### Individual Level
+
+#### Ideation Signature
+Predicts, according to the article, which employees will come up with good ideas.
+
+The ideation signature is measured by having a low value of something called **Burt's constraint**, named after Ronald Stuart Burt. It looks at how widespread connections and how much connections to different groups a person has.
+
 ```{r, warning = FALSE, message = FALSE}
+# Get ideation measure
 igraph::V(example_graph)$ideation <- hrgraphsign::ideation_signature(example_graph)
+# Display Top 3 For Ideation
+knitr::kable(hrgraphsign::get_top_by_column(example_graph, column = "ideation", n = 3))
 ```
 
-### Influence Signature
+#### Influence Signature
 Predicts, according to the article, Which employees will change others’ behavior
+
+Measures how connected connections a person has.
+
+Note: Implementation is vague
+
+
 ```{r, warning = FALSE, message = FALSE}
+# Get influence measure
 igraph::V(example_graph)$influence <- hrgraphsign::influence_signature(example_graph)
+# Display Top 3 For Influence
+knitr::kable(hrgraphsign::get_top_by_column(example_graph, column = "influence", n = 3))
 ```
 
-### Display top 10 
+#### Comparison
 ```{r, warning = FALSE, message = FALSE}
-knitr::kable(hrgraphsign::get_top_by_column(example_graph, column = "ideation", n = 10))
-```
 
-### Plot graph
-
-```{r, warning = FALSE, message = FALSE}
 set.seed(5)
-layout1 <- igraph::layout.fruchterman.reingold(example_graph)
-par(mfrow = c(1,2))
-plot(example_graph,
-     edge.width = igraph::E(example_graph)$weights,
-     vertex.color = hrgraphsign::vertices_colors(example_graph, attribute = "department"),
-     vertex.size = hrgraphsign::vertices_sizes(example_graph, attribute = "ideation"),
-     main = "Ideation",
-     layout = layout1
-     )
-plot(example_graph,
-     edge.width = igraph::E(example_graph)$weights,
-     vertex.color = hrgraphsign::vertices_colors(example_graph, attribute = "department"),
-     vertex.size = hrgraphsign::vertices_sizes(example_graph, attribute = "influence"),
-     main = "Influence",
-     layout = layout1
-)
+ideation_plot <- ggraph(example_graph, layout = 'fr') + 
+  geom_edge_link(show.legend = FALSE, alpha = 0.8) + 
+  geom_node_point(aes(colour = ideation, size = ideation), alpha = 0.8, show.legend = FALSE) + 
+  theme_graph(foreground = 'steelblue', fg_text_colour = 'white') + 
+  scale_colour_gradient(low = "black", high = "purple") +
+  ggtitle("Ideation") + 
+  geom_node_label(aes(label = firstName, filter = ideation == max(ideation)), color = 'black', 
+                 size = 4, alpha = 0.6)
+
+set.seed(5)
+influence_plot <- ggraph(example_graph, layout = 'fr') + 
+  geom_edge_link(show.legend = FALSE, alpha = 0.8) + 
+  geom_node_point(aes(colour = influence, size = influence), alpha = 0.8, show.legend = FALSE) +
+  theme_graph(foreground = 'steelblue', fg_text_colour = 'white') +
+  scale_colour_gradient(low = "black", high = "green") +
+  ggtitle("Influence") +
+  geom_node_label(aes(label = firstName, filter = influence == max(influence)), color = 'black', 
+                 size = 4, alpha = 0.6)
+
+ideation_plot + influence_plot
 ```
 
-### Plot friends_friends
+### Team Level
+
+```{r, warning = FALSE, message = FALSE}
+# Create subgraph for teams to measure
+teams <- c("Engineering", "Marketing", "Sales")
+
+engineering_team <- example_graph %>%
+  igraph::induced_subgraph(., igraph::V(.)[igraph::V(.)$department == "Engineering"])
+marketing_team <- example_graph %>%
+  igraph::induced_subgraph(., igraph::V(.)[igraph::V(.)$department == "Marketing"])
+sales_team <- example_graph %>%
+  igraph::induced_subgraph(., igraph::V(.)[igraph::V(.)$department == "Sales"])
+
+```
+
+#### Efficiency Signature
+Predicts, according to the article, Which teams will complete projects on time.
+
+The efficiency signature is a combination of a team with **high density**, and
+at the same time have **high external range** which means having members that are well connected to different sources outside the team.
+
+```{r, warning = FALSE, message = FALSE}
+# Get measures
+efficiency <- c(
+  hrgraphsign::efficiency_signature(example_graph, engineering_team),
+  hrgraphsign::efficiency_signature(example_graph, marketing_team),
+  hrgraphsign::efficiency_signature(example_graph, sales_team)
+)
+
+knitr::kable(data.frame(teams, efficiency))
+```
+#### Innovation Signature
+Predicts, according to the article, Which teams will innovate effectively.
+
+The innovation signature is a combination of a team with **low density** and
+at the same time have **high external range** or **wide, diverse connections**.
+
+```{r, warning = FALSE, message = FALSE}
+# Get measures
+innovation <- c(
+  hrgraphsign::innovation_signature(example_graph, engineering_team),
+  hrgraphsign::innovation_signature(example_graph, marketing_team),
+  hrgraphsign::innovation_signature(example_graph, sales_team)
+)
+
+knitr::kable(data.frame(teams, efficiency, innovation))
+```
+
+#### Comparison
 
 ```{r, warning = FALSE, message = FALSE}
 
-par(mfrow = c(1,2))
-subgraph <- hrgraphsign::friends_friends(example_graph, 13, 2)
-set.seed(10)
-layout2 <- igraph::layout.fruchterman.reingold(subgraph)
-  plot(subgraph,
-       edge.width = igraph::E(example_graph)$weights,
-       vertex.color = hrgraphsign::vertices_colors(subgraph, attribute = "department"),
-       vertex.size = hrgraphsign::vertices_sizes(subgraph, attribute = "ideation"),
-       main = "Ideation",
-       layout = layout2
-  )
-  plot(subgraph,
-       edge.width = igraph::E(example_graph)$weights,
-       vertex.color = hrgraphsign::vertices_colors(subgraph, attribute = "department"),
-       vertex.size = hrgraphsign::vertices_sizes(subgraph, attribute = "influence"),
-       main = "Influence",
-       layout = layout2
-  )
+set.seed(5)
+ggraph(example_graph, layout = 'fr') + 
+    geom_edge_link(show.legend = FALSE, alpha = 0.8) + 
+    geom_node_point(aes(colour = department), size = 8, alpha = 0.8, show.legend = TRUE) + 
+    theme_graph(foreground = 'steelblue', fg_text_colour = 'white') +
+    geom_node_text(aes(label = name))
+
+```
+
+### Organizational Level
+
+#### Silo Signature
+
+Predicts, according to article, Whether an organization is siloed.
+
+```{r, warning = FALSE, message = FALSE}
+# Get measure
+hrgraphsign::silo_signature(example_graph, igraph::V(example_graph)$department)
+```
+
+### Misc 
+
+#### Plot friends_friends
+
+```{r, warning = FALSE, message = FALSE}
+# Make a subgraph of vertice 13 and neighburs 2 steps away
+subgraph <- hrgraphsign::friends_friends(example_graph, vertices = 13, n_steps = 2)
+set.seed(5)
+ggraph(subgraph, layout = 'fr') + 
+    geom_edge_link(show.legend = FALSE, alpha = 0.8) + 
+    geom_node_point(aes(colour = department), size = 8, alpha = 0.8, show.legend = TRUE) + 
+    theme_graph(foreground = 'steelblue', fg_text_colour = 'white') +
+    geom_node_text(aes(label = name))
 ```
