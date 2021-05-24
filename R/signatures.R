@@ -58,12 +58,13 @@ influence_signature <- function(graph, weights = NULL) {
 #' @examples
 efficiency_signature <- function(graph, team_graph, range_param = 2) {
 
-  external_range <-
-    (friends_friends(graph, igraph::V(team_graph)$name, range_param) %>%
-       igraph::delete_vertices(., igraph::V(team_graph)$name) %>%
-       igraph::components(.))$no
+  external_vertices <-
+    friends_friends(graph, igraph::V(team_graph)$name, range_param) %>%
+       igraph::delete_vertices(., igraph::V(team_graph)$name)
 
-  external_range / igraph::vcount(team_graph) * igraph::graph.density(team_graph)
+  external_range <- igraph::components(external_vertices)$no
+
+  external_range * igraph::graph.density(team_graph)
 }
 
 
@@ -79,13 +80,17 @@ efficiency_signature <- function(graph, team_graph, range_param = 2) {
 #' @examples
 innovation_signature <- function(graph, team_graph, range_param = 2) {
 
-  islands <-
-    friends_friends(graph, igraph::V(team_graph)$name, range_param) %>%
-       igraph::delete_edges(., igraph::V(team_graph)$name)
+  # Make every member of the team into its own island with external neighbors
+  # to be able to look at them individually.
+  team_member_islands <-
+    friends_friends(graph, igraph::V(team_graph)$name, range_param) - team_graph
 
-  external_range <- igraph::components(islands)$no * (igraph::vcount(islands) - igraph::vcount(team_graph))
+  no_of_team_members <- igraph::vcount(team_graph)
+  no_of_external_vertices <- igraph::vcount(graph) - no_of_team_members
 
-  external_range / igraph::vcount(team_graph) / igraph::graph.density(team_graph)
+  external_range <- igraph::components(team_member_islands)$no
+
+  external_range * (1 - igraph::graph.density(team_graph))
 }
 
 #' Extract silo signature

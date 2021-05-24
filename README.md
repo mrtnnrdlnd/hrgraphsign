@@ -185,9 +185,9 @@ knitr::kable(data.frame(teams, efficiency))
 
 | teams       | efficiency |
 |:------------|-----------:|
-| Engineering |  0.0488889 |
-| Marketing   |  0.0355556 |
-| Sales       |  0.0222222 |
+| Engineering |  0.4888889 |
+| Marketing   |  0.3555556 |
+| Sales       |  0.2222222 |
 
 #### Innovation Signature
 
@@ -211,9 +211,9 @@ knitr::kable(data.frame(teams, efficiency, innovation))
 
 | teams       | efficiency | innovation |
 |:------------|-----------:|-----------:|
-| Engineering |  0.0488889 |   21.27273 |
-| Marketing   |  0.0355556 |    1.96875 |
-| Sales       |  0.0222222 |   27.00000 |
+| Engineering |  0.4888889 |   4.533333 |
+| Marketing   |  0.3555556 |   2.577778 |
+| Sales       |  0.2222222 |   7.777778 |
 
 #### Comparison
 
