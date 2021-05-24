@@ -62,7 +62,9 @@ knitr::kable(nodes %>% head(5))
 # edges will be representing the relations between the employees
 edges <- readxl::read_excel("example/edges.xlsx")
 # Look at data
-knitr::kable(edges %>% head(5))
+edges %>% head(5) %>% 
+  dplyr::select(date, FromID, ToID, medium) %>% 
+  knitr::kable()
 ```
 
 ### Create Graph
@@ -85,7 +87,9 @@ The ideation signature is measured by having a low value of something called **B
 # Get ideation measure
 igraph::V(example_graph)$ideation <- hrgraphsign::ideation_signature(example_graph)
 # Display Top 3 For Ideation
-knitr::kable(hrgraphsign::get_top_by_column(example_graph, column = "ideation", n = 3))
+hrgraphsign::get_top_by_column(example_graph, column = "ideation", n = 3) %>% 
+  dplyr::select(firstName, lastName, ideation) %>% 
+  knitr::kable()
 ```
 
 #### Influence Signature
@@ -100,7 +104,9 @@ Note: Implementation is vague
 # Get influence measure
 igraph::V(example_graph)$influence <- hrgraphsign::influence_signature(example_graph)
 # Display Top 3 For Influence
-knitr::kable(hrgraphsign::get_top_by_column(example_graph, column = "influence", n = 3))
+hrgraphsign::get_top_by_column(example_graph, column = "influence", n = 3) %>% 
+  dplyr::select(firstName, lastName, influence, ideation) %>% 
+  knitr::kable()
 ```
 
 #### Comparison

@@ -53,16 +53,18 @@ knitr::kable(nodes %>% head(5))
 # edges will be representing the relations between the employees
 edges <- readxl::read_excel("example/edges.xlsx")
 # Look at data
-knitr::kable(edges %>% head(5))
+edges %>% head(5) %>% 
+  dplyr::select(date, FromID, ToID, medium) %>% 
+  knitr::kable()
 ```
 
-| date       | FromID | ToID | medium  |  …5 |  …6 |
-|:-----------|-------:|-----:|:--------|----:|----:|
-| 2021-04-19 |      4 |    6 | email   |   1 |  10 |
-| 2021-04-20 |      5 |    8 | meeting |   1 |  10 |
-| 2021-04-21 |      6 |    6 | meeting |   1 |  10 |
-| 2021-04-22 |      1 |    8 | email   |   1 |  10 |
-| 2021-04-23 |      6 |    4 | email   |   1 |  10 |
+| date       | FromID | ToID | medium  |
+|:-----------|-------:|-----:|:--------|
+| 2021-04-19 |      4 |    6 | email   |
+| 2021-04-20 |      5 |    8 | meeting |
+| 2021-04-21 |      6 |    6 | meeting |
+| 2021-04-22 |      1 |    8 | email   |
+| 2021-04-23 |      6 |    4 | email   |
 
 ### Create Graph
 
@@ -89,14 +91,16 @@ groups a person has.
 # Get ideation measure
 igraph::V(example_graph)$ideation <- hrgraphsign::ideation_signature(example_graph)
 # Display Top 3 For Ideation
-knitr::kable(hrgraphsign::get_top_by_column(example_graph, column = "ideation", n = 3))
+hrgraphsign::get_top_by_column(example_graph, column = "ideation", n = 3) %>% 
+  dplyr::select(firstName, lastName, ideation) %>% 
+  knitr::kable()
 ```
 
-|     | ideation | name | firstName | lastName | title | department  | employmentYear |
-|:----|---------:|:-----|:----------|:---------|:------|:------------|---------------:|
-| 17  | 5.000000 | 17   | quentin   | quitter  | NA    | Engineering |           2018 |
-| 21  | 4.072398 | 21   | urban     | undilat  | NA    | Marketing   |           2017 |
-| 13  | 4.000000 | 13   | martin    | mustig   | NA    | Engineering |           2017 |
+|     | firstName | lastName | ideation |
+|:----|:----------|:---------|---------:|
+| 17  | quentin   | quitter  | 5.000000 |
+| 21  | urban     | undilat  | 4.072398 |
+| 13  | martin    | mustig   | 4.000000 |
 
 #### Influence Signature
 
@@ -111,14 +115,16 @@ Note: Implementation is vague
 # Get influence measure
 igraph::V(example_graph)$influence <- hrgraphsign::influence_signature(example_graph)
 # Display Top 3 For Influence
-knitr::kable(hrgraphsign::get_top_by_column(example_graph, column = "influence", n = 3))
+hrgraphsign::get_top_by_column(example_graph, column = "influence", n = 3) %>% 
+  dplyr::select(firstName, lastName, influence, ideation) %>% 
+  knitr::kable()
 ```
 
-|     | influence | name | firstName | lastName | title | department  | employmentYear | ideation |
-|:----|----------:|:-----|:----------|:---------|:------|:------------|---------------:|---------:|
-| 19  |  0.108950 | 19   | sara      | sommar   | NA    | Engineering |           2010 | 3.353169 |
-| 13  |  0.081936 | 13   | martin    | mustig   | NA    | Engineering |           2017 | 4.000000 |
-| 24  |  0.075769 | 24   | xenon     | xor      | NA    | Marketing   |           2012 | 3.810756 |
+|     | firstName | lastName | influence | ideation |
+|:----|:----------|:---------|----------:|---------:|
+| 19  | sara      | sommar   |  0.108950 | 3.353169 |
+| 13  | martin    | mustig   |  0.081936 | 4.000000 |
+| 24  | xenon     | xor      |  0.075769 | 3.810756 |
 
 #### Comparison
 
