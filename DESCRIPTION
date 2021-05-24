@@ -20,6 +20,7 @@ BugReports: https://github.com/mrtnnrdlnd/hrgraphsign/issues
 Suggests: 
     rmarkdown,
     ggraph,
+    patchwork,
     tidygraph,
     knitr
 VignetteBuilder: knitr
