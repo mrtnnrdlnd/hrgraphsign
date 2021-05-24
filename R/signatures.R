@@ -13,7 +13,6 @@ ideation_signature <- function(graph, weights = NULL) {
   1 / graph %>%
     igraph::constraint(nodes = igraph::V(graph),
                        weights = weights) %>%
-    BBmisc::normalize(method = "range", range = c(0.1, 1)) %>%
     ifelse(is.na(.), 1, .)
 }
 
@@ -43,8 +42,7 @@ influence_signature <- function(graph, weights = NULL) {
                              directed = if_is_directed,
                              ))$vector
 
-  (graph_betweeness * graph_eigen_centrality) %>%
-    BBmisc::normalize(method = "range", range = c(1, 10))
+  round((graph_betweeness * graph_eigen_centrality), digits = 6)
 }
 
 

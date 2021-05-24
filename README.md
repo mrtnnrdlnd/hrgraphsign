@@ -94,9 +94,9 @@ knitr::kable(hrgraphsign::get_top_by_column(example_graph, column = "ideation", 
 
 |     | ideation | name | firstName | lastName | title | department  | employmentYear |
 |:----|---------:|:-----|:----------|:---------|:------|:------------|---------------:|
-| 17  | 10.00000 | 17   | quentin   | quitter  | NA    | Engineering |           2018 |
-| 21  |  6.61157 | 21   | urban     | undilat  | NA    | Marketing   |           2017 |
-| 13  |  6.40000 | 13   | martin    | mustig   | NA    | Engineering |           2017 |
+| 17  | 5.000000 | 17   | quentin   | quitter  | NA    | Engineering |           2018 |
+| 21  | 4.072398 | 21   | urban     | undilat  | NA    | Marketing   |           2017 |
+| 13  | 4.000000 | 13   | martin    | mustig   | NA    | Engineering |           2017 |
 
 #### Influence Signature
 
@@ -116,9 +116,9 @@ knitr::kable(hrgraphsign::get_top_by_column(example_graph, column = "influence",
 
 |     | influence | name | firstName | lastName | title | department  | employmentYear | ideation |
 |:----|----------:|:-----|:----------|:---------|:------|:------------|---------------:|---------:|
-| 19  | 10.000000 | 19   | sara      | sommar   | NA    | Engineering |           2010 | 4.750515 |
-| 13  |  7.768433 | 13   | martin    | mustig   | NA    | Engineering |           2017 | 6.400000 |
-| 24  |  7.259042 | 24   | xenon     | xor      | NA    | Marketing   |           2012 | 5.874853 |
+| 19  |  0.108950 | 19   | sara      | sommar   | NA    | Engineering |           2010 | 3.353169 |
+| 13  |  0.081936 | 13   | martin    | mustig   | NA    | Engineering |           2017 | 4.000000 |
+| 24  |  0.075769 | 24   | xenon     | xor      | NA    | Marketing   |           2012 | 3.810756 |
 
 #### Comparison
 
