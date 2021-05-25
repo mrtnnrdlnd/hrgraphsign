@@ -247,6 +247,24 @@ hrgraphsign::silo_signature(example_graph, igraph::V(example_graph)$department)
 
     ## [1] 0.4354912
 
+#### Vulnerability Signature
+
+Predicts, accoring to article, Which employees the organization can’t
+afford to lose
+
+``` r
+# Get measure
+hrgraphsign::vulnerabilty_signature(example_graph, igraph::V(example_graph)$department) %>% 
+  knitr::kable()
+```
+
+| vertex | vulnerability\_score |
+|:-------|---------------------:|
+| 9      |                    1 |
+| 19     |                    6 |
+| 20     |                    1 |
+| 21     |                    1 |
+
 ### Misc
 
 #### Plot friends\_friends
@@ -262,4 +280,4 @@ ggraph(subgraph, layout = 'fr') +
     geom_node_text(aes(label = name))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->

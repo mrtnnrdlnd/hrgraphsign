@@ -207,6 +207,16 @@ Predicts, according to article, Whether an organization is siloed.
 hrgraphsign::silo_signature(example_graph, igraph::V(example_graph)$department)
 ```
 
+#### Vulnerability Signature
+
+Predicts, accoring to article, Which employees the organization can’t afford to lose
+
+```{r, warning = FALSE, message = FALSE}
+# Get measure
+hrgraphsign::vulnerabilty_signature(example_graph, igraph::V(example_graph)$department) %>% 
+  knitr::kable()
+```
+
 ### Misc 
 
 #### Plot friends_friends
