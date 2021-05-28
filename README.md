@@ -17,7 +17,7 @@ isolation. Six of these measures are mentioned in the article:
 > are. **by Paul Leonardi and Noshir Contractor**
 
 This package is an attempt to make these six measures a little easier to
-use in practice. The measures is referred to as signatures in the
+use in practice. The measures are referred to as signatures in the
 article and so they will be here. They are, in order of appearance:
 
 1.  **Ideation Signature** - Individual level measure

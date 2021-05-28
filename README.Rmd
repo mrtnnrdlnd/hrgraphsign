@@ -36,7 +36,7 @@ Six of these measures are mentioned in the article:
 > Measure who they know, not just who they are. **by Paul Leonardi and Noshir Contractor**
 
 This package is an attempt to make these six measures a little easier to use in practice.
-The measures is referred to as signatures in the article and so they will be here.
+The measures are referred to as signatures in the article and so they will be here.
 They are, in order of appearance:
 
 1. **Ideation Signature** - Individual level measure
