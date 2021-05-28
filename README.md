@@ -17,14 +17,14 @@ isolation. Six of these measures are mentioned in the article:
 > are. **by Paul Leonardi and Noshir Contractor**
 
 This package is an attempt to make these six measures a little easier to
-use in practice. The measures is referred to as signatures in the
+use in practice. The measures are referred to as signatures in the
 article and so they will be here. They are, in order of appearance:
 
 1.  **Ideation Signature** - Individual level measure
 2.  **Influence Signature** - Individual level measure
 3.  **Efficiency Signature** - Team level measure
 4.  **innovation Signature** - Team level measure
-5.  **Silo Signature** - Organizational level measure
+5.  **Silo Signature** - Team / Organizational level measure
 6.  **Vulnerability Signature** Organizational level measure
 
 ## The Signatures By Example
@@ -53,16 +53,18 @@ knitr::kable(nodes %>% head(5))
 # edges will be representing the relations between the employees
 edges <- readxl::read_excel("example/edges.xlsx")
 # Look at data
-knitr::kable(edges %>% head(5))
+edges %>% head(5) %>% 
+  dplyr::select(date, FromID, ToID, medium) %>% 
+  knitr::kable()
 ```
 
-| date       | FromID | ToID | medium  |  …5 |  …6 |
-|:-----------|-------:|-----:|:--------|----:|----:|
-| 2021-04-19 |      4 |    6 | email   |   1 |  10 |
-| 2021-04-20 |      5 |    8 | meeting |   1 |  10 |
-| 2021-04-21 |      6 |    6 | meeting |   1 |  10 |
-| 2021-04-22 |      1 |    8 | email   |   1 |  10 |
-| 2021-04-23 |      6 |    4 | email   |   1 |  10 |
+| date       | FromID | ToID | medium  |
+|:-----------|-------:|-----:|:--------|
+| 2021-04-19 |      4 |    6 | email   |
+| 2021-04-20 |      5 |    8 | meeting |
+| 2021-04-21 |      6 |    6 | meeting |
+| 2021-04-22 |      1 |    8 | email   |
+| 2021-04-23 |      6 |    4 | email   |
 
 ### Create Graph
 
@@ -89,14 +91,16 @@ groups a person has.
 # Get ideation measure
 igraph::V(example_graph)$ideation <- hrgraphsign::ideation_signature(example_graph)
 # Display Top 3 For Ideation
-knitr::kable(hrgraphsign::get_top_by_column(example_graph, column = "ideation", n = 3))
+hrgraphsign::get_top_by_column(example_graph, column = "ideation", n = 3) %>% 
+  dplyr::select(firstName, lastName, ideation) %>% 
+  knitr::kable()
 ```
 
-|     | ideation | name | firstName | lastName | title | department  | employmentYear |
-|:----|---------:|:-----|:----------|:---------|:------|:------------|---------------:|
-| 17  | 10.00000 | 17   | quentin   | quitter  | NA    | Engineering |           2018 |
-| 21  |  6.61157 | 21   | urban     | undilat  | NA    | Marketing   |           2017 |
-| 13  |  6.40000 | 13   | martin    | mustig   | NA    | Engineering |           2017 |
+|     | firstName | lastName | ideation |
+|:----|:----------|:---------|---------:|
+| 17  | quentin   | quitter  | 5.000000 |
+| 21  | urban     | undilat  | 4.072398 |
+| 13  | martin    | mustig   | 4.000000 |
 
 #### Influence Signature
 
@@ -111,14 +115,16 @@ Note: Implementation is vague
 # Get influence measure
 igraph::V(example_graph)$influence <- hrgraphsign::influence_signature(example_graph)
 # Display Top 3 For Influence
-knitr::kable(hrgraphsign::get_top_by_column(example_graph, column = "influence", n = 3))
+hrgraphsign::get_top_by_column(example_graph, column = "influence", n = 3) %>% 
+  dplyr::select(firstName, lastName, influence, ideation) %>% 
+  knitr::kable()
 ```
 
-|     | influence | name | firstName | lastName | title | department  | employmentYear | ideation |
-|:----|----------:|:-----|:----------|:---------|:------|:------------|---------------:|---------:|
-| 19  | 10.000000 | 19   | sara      | sommar   | NA    | Engineering |           2010 | 4.750515 |
-| 13  |  7.768433 | 13   | martin    | mustig   | NA    | Engineering |           2017 | 6.400000 |
-| 24  |  7.259042 | 24   | xenon     | xor      | NA    | Marketing   |           2012 | 5.874853 |
+|     | firstName | lastName | influence | ideation |
+|:----|:----------|:---------|----------:|---------:|
+| 19  | sara      | sommar   |  0.108950 | 3.353169 |
+| 13  | martin    | mustig   |  0.081936 | 4.000000 |
+| 24  | xenon     | xor      |  0.075769 | 3.810756 |
 
 #### Comparison
 
@@ -162,6 +168,22 @@ sales_team <- example_graph %>%
   igraph::induced_subgraph(., igraph::V(.)[igraph::V(.)$department == "Sales"])
 ```
 
+#### Preview
+
+This is just to get a feel for the graph and the teams/departments.
+Subsequent measures are done on this team configuration.
+
+``` r
+set.seed(5)
+ggraph(example_graph, layout = 'fr') + 
+    geom_edge_link(show.legend = FALSE, alpha = 0.8) + 
+    geom_node_point(aes(colour = department), size = 8, alpha = 0.8, show.legend = TRUE) + 
+    theme_graph(foreground = 'steelblue', fg_text_colour = 'white') +
+    geom_node_text(aes(label = name))
+```
+
+![](README_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+
 #### Efficiency Signature
 
 Predicts, according to the article, Which teams will complete projects
@@ -185,9 +207,9 @@ knitr::kable(data.frame(teams, efficiency))
 
 | teams       | efficiency |
 |:------------|-----------:|
-| Engineering |  0.0488889 |
-| Marketing   |  0.0355556 |
-| Sales       |  0.0222222 |
+| Engineering |  0.4888889 |
+| Marketing   |  0.3555556 |
+| Sales       |  0.2222222 |
 
 #### Innovation Signature
 
@@ -211,35 +233,70 @@ knitr::kable(data.frame(teams, efficiency, innovation))
 
 | teams       | efficiency | innovation |
 |:------------|-----------:|-----------:|
-| Engineering |  0.0488889 |   21.27273 |
-| Marketing   |  0.0355556 |    1.96875 |
-| Sales       |  0.0222222 |   27.00000 |
+| Engineering |  0.4888889 |   4.533333 |
+| Marketing   |  0.3555556 |   2.577778 |
+| Sales       |  0.2222222 |   7.777778 |
 
-#### Comparison
+#### Silo Signature (Team)
+
+To measure how siloed a team is you take the quotient of internal and
+external edges.
 
 ``` r
+# Get measures
+silo <- c(
+  hrgraphsign::silo_quotient(example_graph, engineering_team),
+  hrgraphsign::silo_quotient(example_graph, marketing_team),
+  hrgraphsign::silo_quotient(example_graph, sales_team)
+)
+
+knitr::kable(data.frame(teams, silo, efficiency, innovation))
+```
+
+| teams       |      silo | efficiency | innovation |
+|:------------|----------:|-----------:|-----------:|
+| Engineering | 0.5789474 |  0.4888889 |   4.533333 |
+| Marketing   | 1.6000000 |  0.3555556 |   2.577778 |
+| Sales       | 5.0000000 |  0.2222222 |   7.777778 |
+
+### Organizational Level
+
+#### Silo Signature (Organization)
+
+Predicts, according to article, Whether an organization is siloed.
+
+The measure of the organization at large is based on the **modularity**
+of the graph.
+
+``` r
+example_graph %>% hrgraphsign::silo_signature(., igraph::V(.)$department)
+```
+
+    ## [1] 0.4354912
+
+#### Vulnerability Signature
+
+Predicts, according to article, Which employees the organization can’t
+afford to lose.
+
+This measure of vulnerability counts how many connections a vertex has
+to vertices outside the team.
+
+``` r
+# Get measure
+igraph::V(example_graph)$vulnerability <- example_graph %>% 
+  hrgraphsign::vulnerabilty_signature(., igraph::V(.)$department)
+
+# Visualize
 set.seed(5)
 ggraph(example_graph, layout = 'fr') + 
     geom_edge_link(show.legend = FALSE, alpha = 0.8) + 
-    geom_node_point(aes(colour = department), size = 8, alpha = 0.8, show.legend = TRUE) + 
+    geom_node_point(aes(colour = department, size = vulnerability), alpha = 0.8, show.legend = TRUE) + 
     theme_graph(foreground = 'steelblue', fg_text_colour = 'white') +
     geom_node_text(aes(label = name))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
-
-### Organizational Level
-
-#### Silo Signature
-
-Predicts, according to article, Whether an organization is siloed.
-
-``` r
-# Get measure
-hrgraphsign::silo_signature(example_graph, igraph::V(example_graph)$department)
-```
-
-    ## [1] 0.4354912
+![](README_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
 
 ### Misc
 
@@ -256,4 +313,4 @@ ggraph(subgraph, layout = 'fr') +
     geom_node_text(aes(label = name))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->

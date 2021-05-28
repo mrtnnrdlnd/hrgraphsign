@@ -2,7 +2,7 @@
 % Please edit documentation in R/signatures.R
 \name{efficiency_signature}
 \alias{efficiency_signature}
-\title{Extract efficiency signature}
+\title{Extract Efficiency Signature}
 \usage{
 efficiency_signature(graph, team_graph, range_param = 2)
 }
@@ -17,5 +17,5 @@ efficiency_signature(graph, team_graph, range_param = 2)
 A number representing efficiency score of team_graph
 }
 \description{
-Extract efficiency signature
+Extract Efficiency Signature
 }

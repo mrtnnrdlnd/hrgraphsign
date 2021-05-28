@@ -1,5 +1,5 @@
 
-#' Extract ideation signature
+#' Extract Ideation Signature
 #'
 #' @param graph Graph to analyze
 #' @param weights A string that specifies attribute representing weights of the graph
@@ -13,11 +13,10 @@ ideation_signature <- function(graph, weights = NULL) {
   1 / graph %>%
     igraph::constraint(nodes = igraph::V(graph),
                        weights = weights) %>%
-    BBmisc::normalize(method = "range", range = c(0.1, 1)) %>%
     ifelse(is.na(.), 1, .)
 }
 
-#' Extract influence signature
+#' Extract Influence Signature
 #'
 #' This is a fishy implementation of influence
 #'
@@ -43,12 +42,11 @@ influence_signature <- function(graph, weights = NULL) {
                              directed = if_is_directed,
                              ))$vector
 
-  (graph_betweeness * graph_eigen_centrality) %>%
-    BBmisc::normalize(method = "range", range = c(1, 10))
+  round((graph_betweeness * graph_eigen_centrality), digits = 6)
 }
 
 
-#' Extract efficiency signature
+#' Extract Efficiency Signature
 #'
 #' @param graph Graph where team is part of
 #' @param team_graph Subgraph with only team members
@@ -60,16 +58,17 @@ influence_signature <- function(graph, weights = NULL) {
 #' @examples
 efficiency_signature <- function(graph, team_graph, range_param = 2) {
 
-  external_range <-
-    (friends_friends(graph, igraph::V(team_graph)$name, range_param) %>%
-       igraph::delete_vertices(., igraph::V(team_graph)$name) %>%
-       igraph::components(.))$no
+  external_vertices <-
+    friends_friends(graph, igraph::V(team_graph)$name, range_param) %>%
+       igraph::delete_vertices(., igraph::V(team_graph)$name)
 
-  external_range / igraph::vcount(team_graph) * igraph::graph.density(team_graph)
+  external_range <- igraph::components(external_vertices)$no
+
+  external_range * igraph::graph.density(team_graph)
 }
 
 
-#' Extract innovation signature
+#' Extract Innovation Signature
 #'
 #' @param graph Graph where team is part of
 #' @param team_graph Subgraph with only team members
@@ -81,30 +80,88 @@ efficiency_signature <- function(graph, team_graph, range_param = 2) {
 #' @examples
 innovation_signature <- function(graph, team_graph, range_param = 2) {
 
-  islands <-
-    friends_friends(graph, igraph::V(team_graph)$name, range_param) %>%
-       igraph::delete_edges(., igraph::V(team_graph)$name)
+  team_member_islands <-
+    friends_friends(graph, igraph::V(team_graph)$name, range_param) - team_graph
 
-  external_range <- igraph::components(islands)$no * (igraph::vcount(islands) - igraph::vcount(team_graph))
+  no_of_team_members <- igraph::vcount(team_graph)
+  no_of_external_vertices <- igraph::vcount(graph) - no_of_team_members
 
-  external_range / igraph::vcount(team_graph) / igraph::graph.density(team_graph)
+  external_range <- igraph::components(team_member_islands)$no
+
+  external_range * (1 - igraph::graph.density(team_graph))
 }
 
-#' Extract silo signature
+
+
+#' Default Clustering
+#'
+#' @param graph The input graph
+#'
+#' @return cluster_fast_greedy clustering
+#' @export
+#'
+#' @examples
+default_clustering <- function(graph) {
+  igraph::cluster_fast_greedy(igraph::as.undirected(graph))$membership
+}
+
+
+#' Extract Silo Signature
 #'
 #' This function is igraph::modularity renamed + default membership set to cluster_fast_greedy
 #'
 #' @param graph The input graph.
-#' @param membership Numeric vector, for each vertex it gives its community. The communities are numbered from one.
+#' @param membership Character vector, for each vertex it gives its community.
 #' @param weights If not NULL then a numeric vector giving edge weights.
 #'
-#' @return Silo signature measure (aka modularity)
+#' @return Silo signature measure of graph (aka modularity)
 #' @export
 #'
 #' @examples
 silo_signature <- function(graph,
-                           membership = igraph::cluster_fast_greedy(igraph::as.undirected(graph))$membership,
+                           membership = default_clustering(graph),
                            weights = NULL) {
 
-  igraph::modularity(graph, factor(membership))
+  igraph::modularity(graph, factor(membership), weights = weights)
+}
+
+#' Extract Silo Quotient
+#'
+#' @param graph The input graph
+#' @param membership Character vector, for each vertex it gives its community.
+#'
+#' @return A tibble with the teams silo quotients
+#' @export
+#'
+#' @examples
+silo_quotient <- function(graph,
+                           team_graph) {
+
+    internal_no_edges <- igraph::ecount(team_graph)
+    external_no_edges <- igraph::ecount(friends_friends(graph, igraph::V(team_graph)$name, 1)) - internal_no_edges
+
+    internal_no_edges / ifelse(external_no_edges > 0, external_no_edges, 1)
+}
+
+#' Extract Vulnerability Signature
+#'
+#' @param graph The input graph.
+#' @param membership Character vector, for each vertex it gives its community.
+#' @param weights If not NULL then a numeric vector giving edge weights.
+#'
+#' @return A tibble of vertices with high vulnerability score
+#' @export
+#'
+#' @examples
+vulnerabilty_signature <- function(graph,
+                                   membership = default_clustering(graph),
+                                   weights = NULL) {
+
+ igraph::V(graph)$membership <- factor(membership)
+ for (team in unique(igraph::V(graph)$membership)) {
+   graph <- graph - igraph::induced_subgraph(graph, igraph::V(graph)$membership == team)
+ }
+
+ unlist(igraph::degree(graph))
+
 }
