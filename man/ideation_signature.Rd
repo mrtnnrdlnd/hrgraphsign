@@ -2,7 +2,7 @@
 % Please edit documentation in R/signatures.R
 \name{ideation_signature}
 \alias{ideation_signature}
-\title{Extract ideation signature}
+\title{Extract Ideation Signature}
 \usage{
 ideation_signature(graph, weights = NULL)
 }
@@ -15,5 +15,5 @@ ideation_signature(graph, weights = NULL)
 Igraph column with values of ideation on a scale from 1 to 10
 }
 \description{
-Extract ideation signature
+Extract Ideation Signature
 }

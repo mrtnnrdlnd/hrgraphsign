@@ -24,7 +24,7 @@ article and so they will be here. They are, in order of appearance:
 2.  **Influence Signature** - Individual level measure
 3.  **Efficiency Signature** - Team level measure
 4.  **innovation Signature** - Team level measure
-5.  **Silo Signature** - Organizational level measure
+5.  **Silo Signature** - Team / Organizational level measure
 6.  **Vulnerability Signature** Organizational level measure
 
 ## The Signatures By Example
@@ -168,6 +168,22 @@ sales_team <- example_graph %>%
   igraph::induced_subgraph(., igraph::V(.)[igraph::V(.)$department == "Sales"])
 ```
 
+#### Preview
+
+This is just to get a feel for the graph and the teams/departments.
+Subsequent measures are done on this team configuration.
+
+``` r
+set.seed(5)
+ggraph(example_graph, layout = 'fr') + 
+    geom_edge_link(show.legend = FALSE, alpha = 0.8) + 
+    geom_node_point(aes(colour = department), size = 8, alpha = 0.8, show.legend = TRUE) + 
+    theme_graph(foreground = 'steelblue', fg_text_colour = 'white') +
+    geom_node_text(aes(label = name))
+```
+
+![](README_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+
 #### Efficiency Signature
 
 Predicts, according to the article, Which teams will complete projects
@@ -221,49 +237,66 @@ knitr::kable(data.frame(teams, efficiency, innovation))
 | Marketing   |  0.3555556 |   2.577778 |
 | Sales       |  0.2222222 |   7.777778 |
 
-#### Comparison
+#### Silo Signature (Team)
+
+To measure how siloed a team is you take the quotient of internal and
+external edges.
 
 ``` r
-set.seed(5)
-ggraph(example_graph, layout = 'fr') + 
-    geom_edge_link(show.legend = FALSE, alpha = 0.8) + 
-    geom_node_point(aes(colour = department), size = 8, alpha = 0.8, show.legend = TRUE) + 
-    theme_graph(foreground = 'steelblue', fg_text_colour = 'white') +
-    geom_node_text(aes(label = name))
+# Get measures
+silo <- c(
+  hrgraphsign::silo_quotient(example_graph, engineering_team),
+  hrgraphsign::silo_quotient(example_graph, marketing_team),
+  hrgraphsign::silo_quotient(example_graph, sales_team)
+)
+
+knitr::kable(data.frame(teams, silo, efficiency, innovation))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+| teams       |      silo | efficiency | innovation |
+|:------------|----------:|-----------:|-----------:|
+| Engineering | 0.5789474 |  0.4888889 |   4.533333 |
+| Marketing   | 1.6000000 |  0.3555556 |   2.577778 |
+| Sales       | 5.0000000 |  0.2222222 |   7.777778 |
 
 ### Organizational Level
 
-#### Silo Signature
+#### Silo Signature (Organization)
 
 Predicts, according to article, Whether an organization is siloed.
 
+The measure of the organization at large is based on the **modularity**
+of the graph.
+
 ``` r
-# Get measure
-hrgraphsign::silo_signature(example_graph, igraph::V(example_graph)$department)
+example_graph %>% hrgraphsign::silo_signature(., igraph::V(.)$department)
 ```
 
     ## [1] 0.4354912
 
 #### Vulnerability Signature
 
-Predicts, accoring to article, Which employees the organization can’t
-afford to lose
+Predicts, according to article, Which employees the organization can’t
+afford to lose.
+
+This measure of vulnerability counts how many connections a vertex has
+to vertices outside the team.
 
 ``` r
 # Get measure
-hrgraphsign::vulnerabilty_signature(example_graph, igraph::V(example_graph)$department) %>% 
-  knitr::kable()
+igraph::V(example_graph)$vulnerability <- example_graph %>% 
+  hrgraphsign::vulnerabilty_signature(., igraph::V(.)$department)
+
+# Visualize
+set.seed(5)
+ggraph(example_graph, layout = 'fr') + 
+    geom_edge_link(show.legend = FALSE, alpha = 0.8) + 
+    geom_node_point(aes(colour = department, size = vulnerability), alpha = 0.8, show.legend = TRUE) + 
+    theme_graph(foreground = 'steelblue', fg_text_colour = 'white') +
+    geom_node_text(aes(label = name))
 ```
 
-| vertex | vulnerability\_score |
-|:-------|---------------------:|
-| 9      |                    1 |
-| 19     |                    6 |
-| 20     |                    1 |
-| 21     |                    1 |
+![](README_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
 
 ### Misc
 
@@ -280,4 +313,4 @@ ggraph(subgraph, layout = 'fr') +
     geom_node_text(aes(label = name))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->

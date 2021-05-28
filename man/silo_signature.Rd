@@ -2,18 +2,14 @@
 % Please edit documentation in R/signatures.R
 \name{silo_signature}
 \alias{silo_signature}
-\title{Extract silo signature}
+\title{Extract Silo Signature}
 \usage{
-silo_signature(
-  graph,
-  membership = igraph::cluster_fast_greedy(igraph::as.undirected(graph))$membership,
-  weights = NULL
-)
+silo_signature(graph, membership = default_clustering(graph), weights = NULL)
 }
 \arguments{
 \item{graph}{The input graph.}
 
-\item{membership}{Numeric vector, for each vertex it gives its community. The communities are numbered from one.}
+\item{membership}{Character vector, for each vertex it gives its community.}
 
 \item{weights}{If not NULL then a numeric vector giving edge weights.}
 }

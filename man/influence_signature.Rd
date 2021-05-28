@@ -2,7 +2,7 @@
 % Please edit documentation in R/signatures.R
 \name{influence_signature}
 \alias{influence_signature}
-\title{Extract influence signature}
+\title{Extract Influence Signature}
 \usage{
 influence_signature(graph, weights = NULL)
 }

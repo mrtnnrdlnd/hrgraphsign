@@ -43,7 +43,7 @@ They are, in order of appearance:
 2. **Influence Signature** - Individual level measure
 3. **Efficiency Signature** - Team level measure
 4. **innovation Signature** - Team level measure
-5. **Silo Signature** - Organizational level measure
+5. **Silo Signature** - Team / Organizational level measure
 6. **Vulnerability Signature** Organizational level measure
 
 ## The Signatures By Example
@@ -150,6 +150,22 @@ sales_team <- example_graph %>%
 
 ```
 
+#### Preview
+
+This is just to get a feel for the graph and the teams/departments.
+Subsequent measures are done on this team configuration.
+
+```{r, warning = FALSE, message = FALSE}
+
+set.seed(5)
+ggraph(example_graph, layout = 'fr') + 
+    geom_edge_link(show.legend = FALSE, alpha = 0.8) + 
+    geom_node_point(aes(colour = department), size = 8, alpha = 0.8, show.legend = TRUE) + 
+    theme_graph(foreground = 'steelblue', fg_text_colour = 'white') +
+    geom_node_text(aes(label = name))
+
+```
+
 #### Efficiency Signature
 Predicts, according to the article, Which teams will complete projects on time.
 
@@ -183,38 +199,54 @@ innovation <- c(
 knitr::kable(data.frame(teams, efficiency, innovation))
 ```
 
-#### Comparison
+#### Silo Signature (Team)
+
+To measure how siloed a team is you take the quotient of internal and external edges.
 
 ```{r, warning = FALSE, message = FALSE}
+# Get measures
+silo <- c(
+  hrgraphsign::silo_quotient(example_graph, engineering_team),
+  hrgraphsign::silo_quotient(example_graph, marketing_team),
+  hrgraphsign::silo_quotient(example_graph, sales_team)
+)
 
-set.seed(5)
-ggraph(example_graph, layout = 'fr') + 
-    geom_edge_link(show.legend = FALSE, alpha = 0.8) + 
-    geom_node_point(aes(colour = department), size = 8, alpha = 0.8, show.legend = TRUE) + 
-    theme_graph(foreground = 'steelblue', fg_text_colour = 'white') +
-    geom_node_text(aes(label = name))
-
+knitr::kable(data.frame(teams, silo, efficiency, innovation))
 ```
 
 ### Organizational Level
 
-#### Silo Signature
+#### Silo Signature (Organization)
 
 Predicts, according to article, Whether an organization is siloed.
 
+The measure of the organization at large is based on the **modularity** of the graph.
+
 ```{r, warning = FALSE, message = FALSE}
-# Get measure
-hrgraphsign::silo_signature(example_graph, igraph::V(example_graph)$department)
+example_graph %>% hrgraphsign::silo_signature(., igraph::V(.)$department)
 ```
+
+
+
 
 #### Vulnerability Signature
 
-Predicts, accoring to article, Which employees the organization can’t afford to lose
+Predicts, according to article, Which employees the organization can’t afford to lose.
+
+This measure of vulnerability counts how many connections a vertex has to vertices outside the team.
 
 ```{r, warning = FALSE, message = FALSE}
 # Get measure
-hrgraphsign::vulnerabilty_signature(example_graph, igraph::V(example_graph)$department) %>% 
-  knitr::kable()
+igraph::V(example_graph)$vulnerability <- example_graph %>% 
+  hrgraphsign::vulnerabilty_signature(., igraph::V(.)$department)
+
+# Visualize
+set.seed(5)
+ggraph(example_graph, layout = 'fr') + 
+    geom_edge_link(show.legend = FALSE, alpha = 0.8) + 
+    geom_node_point(aes(colour = department, size = vulnerability), alpha = 0.8, show.legend = TRUE) + 
+    theme_graph(foreground = 'steelblue', fg_text_colour = 'white') +
+    geom_node_text(aes(label = name))
 ```
 
 ### Misc 

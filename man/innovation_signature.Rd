@@ -2,7 +2,7 @@
 % Please edit documentation in R/signatures.R
 \name{innovation_signature}
 \alias{innovation_signature}
-\title{Extract innovation signature}
+\title{Extract Innovation Signature}
 \usage{
 innovation_signature(graph, team_graph, range_param = 2)
 }
@@ -17,5 +17,5 @@ innovation_signature(graph, team_graph, range_param = 2)
 A number representing innovation score of team_graph
 }
 \description{
-Extract innovation signature
+Extract Innovation Signature
 }

@@ -2,18 +2,18 @@
 % Please edit documentation in R/signatures.R
 \name{vulnerabilty_signature}
 \alias{vulnerabilty_signature}
-\title{Title}
+\title{Extract Vulnerability Signature}
 \usage{
 vulnerabilty_signature(
   graph,
-  membership = igraph::cluster_fast_greedy(igraph::as.undirected(graph))$membership,
+  membership = default_clustering(graph),
   weights = NULL
 )
 }
 \arguments{
 \item{graph}{The input graph.}
 
-\item{membership}{Numeric vector, for each vertex it gives its community. The communities are numbered from one.}
+\item{membership}{Character vector, for each vertex it gives its community.}
 
 \item{weights}{If not NULL then a numeric vector giving edge weights.}
 }
@@ -21,5 +21,5 @@ vulnerabilty_signature(
 A tibble of vertices with high vulnerability score
 }
 \description{
-Title
+Extract Vulnerability Signature
 }
