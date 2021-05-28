@@ -1,5 +1,5 @@
 
-#' Extract ideation signature
+#' Extract Ideation Signature
 #'
 #' @param graph Graph to analyze
 #' @param weights A string that specifies attribute representing weights of the graph
@@ -16,7 +16,7 @@ ideation_signature <- function(graph, weights = NULL) {
     ifelse(is.na(.), 1, .)
 }
 
-#' Extract influence signature
+#' Extract Influence Signature
 #'
 #' This is a fishy implementation of influence
 #'
@@ -46,7 +46,7 @@ influence_signature <- function(graph, weights = NULL) {
 }
 
 
-#' Extract efficiency signature
+#' Extract Efficiency Signature
 #'
 #' @param graph Graph where team is part of
 #' @param team_graph Subgraph with only team members
@@ -68,7 +68,7 @@ efficiency_signature <- function(graph, team_graph, range_param = 2) {
 }
 
 
-#' Extract innovation signature
+#' Extract Innovation Signature
 #'
 #' @param graph Graph where team is part of
 #' @param team_graph Subgraph with only team members
@@ -91,12 +91,27 @@ innovation_signature <- function(graph, team_graph, range_param = 2) {
   external_range * (1 - igraph::graph.density(team_graph))
 }
 
-#' Extract silo signature
+
+
+#' Default Clustering
+#'
+#' @param graph The input graph
+#'
+#' @return cluster_fast_greedy clustering
+#' @export
+#'
+#' @examples
+default_clustering <- function(graph) {
+  igraph::cluster_fast_greedy(igraph::as.undirected(graph))$membership
+}
+
+
+#' Extract Silo Signature
 #'
 #' This function is igraph::modularity renamed + default membership set to cluster_fast_greedy
 #'
 #' @param graph The input graph.
-#' @param membership Numeric vector, for each vertex it gives its community. The communities are numbered from one.
+#' @param membership Character vector, for each vertex it gives its community.
 #' @param weights If not NULL then a numeric vector giving edge weights.
 #'
 #' @return Silo signature measure of graph (aka modularity)
@@ -104,20 +119,34 @@ innovation_signature <- function(graph, team_graph, range_param = 2) {
 #'
 #' @examples
 silo_signature <- function(graph,
-                           membership = igraph::cluster_fast_greedy(igraph::as.undirected(graph))$membership,
+                           membership = default_clustering(graph),
                            weights = NULL) {
 
   igraph::modularity(graph, factor(membership), weights = weights)
 }
 
-silo_qoutents <- function(graph, membership = igraph::cluster_fast_greedy(igraph::as.undirected(graph))$membership) {
+#' Extract Silo Quotient
+#'
+#' @param graph The input graph
+#' @param membership Character vector, for each vertex it gives its community.
+#'
+#' @return A tibble with the teams silo quotients
+#' @export
+#'
+#' @examples
+silo_quotient <- function(graph,
+                           team_graph) {
 
+    internal_no_edges <- igraph::ecount(team_graph)
+    external_no_edges <- igraph::ecount(friends_friends(graph, igraph::V(team_graph)$name, 1)) - internal_no_edges
+
+    internal_no_edges / ifelse(external_no_edges > 0, external_no_edges, 1)
 }
 
-#' Title
+#' Extract Vulnerability Signature
 #'
 #' @param graph The input graph.
-#' @param membership Numeric vector, for each vertex it gives its community. The communities are numbered from one.
+#' @param membership Character vector, for each vertex it gives its community.
 #' @param weights If not NULL then a numeric vector giving edge weights.
 #'
 #' @return A tibble of vertices with high vulnerability score
@@ -125,19 +154,14 @@ silo_qoutents <- function(graph, membership = igraph::cluster_fast_greedy(igraph
 #'
 #' @examples
 vulnerabilty_signature <- function(graph,
-                                   membership = igraph::cluster_fast_greedy(igraph::as.undirected(graph))$membership,
+                                   membership = default_clustering(graph),
                                    weights = NULL) {
 
  igraph::V(graph)$membership <- factor(membership)
- for(team in igraph::V(graph)$membership) {
+ for (team in unique(igraph::V(graph)$membership)) {
    graph <- graph - igraph::induced_subgraph(graph, igraph::V(graph)$membership == team)
  }
 
- isolated <- which(igraph::degree(graph) == 0)
- graph <- igraph::delete_vertices(graph, isolated)
-
- igraph::betweenness(graph, weights = weights) %>%
-   tibble::enframe(name = "vertex", value = "vulnerability_score") %>%
-   dplyr::filter(vulnerability_score > 0)
+ unlist(igraph::degree(graph))
 
 }
