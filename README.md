@@ -269,7 +269,7 @@ The measure of the organization at large is based on the **modularity**
 of the graph.
 
 ``` r
-example_graph %>% hrgraphsign::silo_signature(., igraph::V(.)$department)
+example_graph %>% hrgraphsign::silo_signature(., membership = department)
 ```
 
     ## [1] 0.4354912
@@ -285,7 +285,7 @@ to vertices outside the team.
 ``` r
 # Get measure
 igraph::V(example_graph)$vulnerability <- example_graph %>% 
-  hrgraphsign::vulnerabilty_signature(., igraph::V(.)$department)
+  hrgraphsign::vulnerabilty_signature(., membership = department)
 
 # Visualize
 set.seed(5)

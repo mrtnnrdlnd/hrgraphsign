@@ -223,7 +223,7 @@ Predicts, according to article, Whether an organization is siloed.
 The measure of the organization at large is based on the **modularity** of the graph.
 
 ```{r, warning = FALSE, message = FALSE}
-example_graph %>% hrgraphsign::silo_signature(., igraph::V(.)$department)
+example_graph %>% hrgraphsign::silo_signature(., membership = department)
 ```
 
 
@@ -238,7 +238,7 @@ This measure of vulnerability counts how many connections a vertex has to vertic
 ```{r, warning = FALSE, message = FALSE}
 # Get measure
 igraph::V(example_graph)$vulnerability <- example_graph %>% 
-  hrgraphsign::vulnerabilty_signature(., igraph::V(.)$department)
+  hrgraphsign::vulnerabilty_signature(., membership = department)
 
 # Visualize
 set.seed(5)
