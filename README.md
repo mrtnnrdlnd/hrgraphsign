@@ -291,7 +291,8 @@ igraph::V(example_graph)$vulnerability <- example_graph %>%
 set.seed(5)
 ggraph(example_graph, layout = 'fr') + 
     geom_edge_link(show.legend = FALSE, alpha = 0.8) + 
-    geom_node_point(aes(colour = department, size = vulnerability), alpha = 0.8, show.legend = TRUE) + 
+    geom_node_point(aes(colour = department, size = vulnerability), alpha = 0.8, show.legend = TRUE) +
+    scale_colour_discrete() +
     theme_graph(foreground = 'steelblue', fg_text_colour = 'white') +
     geom_node_text(aes(label = name))
 ```
@@ -299,6 +300,27 @@ ggraph(example_graph, layout = 'fr') +
 ![](README_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
 
 ### Misc
+
+#### Color by Clustering Algorithm
+
+``` r
+# Get measure
+igraph::V(example_graph)$cluster <- igraph::cluster_fast_greedy(igraph::as.undirected(example_graph))$membership
+
+igraph::V(example_graph)$vulnerability <- example_graph %>% 
+  hrgraphsign::vulnerabilty_signature(., membership = cluster)
+
+# Visualize
+set.seed(5)
+ggraph(example_graph, layout = 'fr') + 
+    geom_edge_link(show.legend = FALSE, alpha = 0.8) + 
+    geom_node_point(aes(color = factor(cluster), size = vulnerability), alpha = 0.8, show.legend = TRUE) +
+    scale_color_discrete() +
+    theme_graph(foreground = 'steelblue', fg_text_colour = 'white') +
+    geom_node_text(aes(label = name))
+```
+
+![](README_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
 
 #### Plot friends\_friends
 
@@ -313,4 +335,4 @@ ggraph(subgraph, layout = 'fr') +
     geom_node_text(aes(label = name))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
