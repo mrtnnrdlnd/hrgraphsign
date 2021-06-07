@@ -4,16 +4,12 @@
 \alias{vulnerabilty_signature}
 \title{Extract Vulnerability Signature}
 \usage{
-vulnerabilty_signature(
-  graph,
-  membership = default_clustering(graph),
-  weights = NULL
-)
+vulnerabilty_signature(graph, membership, weights = NULL)
 }
 \arguments{
 \item{graph}{The input graph.}
 
-\item{membership}{Character vector, for each vertex it gives its community.}
+\item{membership}{Vertex attribute to cluster by.}
 
 \item{weights}{If not NULL then a numeric vector giving edge weights.}
 }

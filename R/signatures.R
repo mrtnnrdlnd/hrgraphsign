@@ -92,26 +92,12 @@ innovation_signature <- function(graph, team_graph, range_param = 2) {
 }
 
 
-
-#' Default Clustering
-#'
-#' @param graph The input graph
-#'
-#' @return cluster_fast_greedy clustering
-#' @export
-#'
-#' @examples
-default_clustering <- function(graph) {
-  igraph::cluster_fast_greedy(igraph::as.undirected(graph))$membership
-}
-
-
 #' Extract Silo Signature
 #'
-#' This function is igraph::modularity renamed + default membership set to cluster_fast_greedy
+#' This function is igraph::modularity renamed + default membership
 #'
 #' @param graph The input graph.
-#' @param membership Character vector, for each vertex it gives its community.
+#' @param membership Vertex attribute to cluster by.
 #' @param weights If not NULL then a numeric vector giving edge weights.
 #'
 #' @return Silo signature measure of graph (aka modularity)
@@ -119,8 +105,10 @@ default_clustering <- function(graph) {
 #'
 #' @examples
 silo_signature <- function(graph,
-                           membership = default_clustering(graph),
+                           membership,
                            weights = NULL) {
+
+  membership <- igraph::vertex_attr(graph, deparse(substitute(membership)))
 
   igraph::modularity(graph, factor(membership), weights = weights)
 }
@@ -146,7 +134,7 @@ silo_quotient <- function(graph,
 #' Extract Vulnerability Signature
 #'
 #' @param graph The input graph.
-#' @param membership Character vector, for each vertex it gives its community.
+#' @param membership Vertex attribute to cluster by.
 #' @param weights If not NULL then a numeric vector giving edge weights.
 #'
 #' @return A tibble of vertices with high vulnerability score
@@ -154,14 +142,14 @@ silo_quotient <- function(graph,
 #'
 #' @examples
 vulnerabilty_signature <- function(graph,
-                                   membership = default_clustering(graph),
+                                   membership,
                                    weights = NULL) {
 
- igraph::V(graph)$membership <- factor(membership)
- for (team in unique(igraph::V(graph)$membership)) {
-   graph <- graph - igraph::induced_subgraph(graph, igraph::V(graph)$membership == team)
+ membership <- igraph::vertex_attr(graph, deparse(substitute(membership)))
+
+ for (team in unique(membership)) {
+   graph <- graph - igraph::induced_subgraph(graph, membership == team)
  }
 
  unlist(igraph::degree(graph))
-
 }

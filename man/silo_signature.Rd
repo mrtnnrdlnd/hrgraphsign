@@ -4,12 +4,12 @@
 \alias{silo_signature}
 \title{Extract Silo Signature}
 \usage{
-silo_signature(graph, membership = default_clustering(graph), weights = NULL)
+silo_signature(graph, membership, weights = NULL)
 }
 \arguments{
 \item{graph}{The input graph.}
 
-\item{membership}{Character vector, for each vertex it gives its community.}
+\item{membership}{Vertex attribute to cluster by.}
 
 \item{weights}{If not NULL then a numeric vector giving edge weights.}
 }
@@ -17,5 +17,5 @@ silo_signature(graph, membership = default_clustering(graph), weights = NULL)
 Silo signature measure of graph (aka modularity)
 }
 \description{
-This function is igraph::modularity renamed + default membership set to cluster_fast_greedy
+This function is igraph::modularity renamed + default membership
 }
