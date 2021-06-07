@@ -141,7 +141,7 @@ silo_quotient <- function(graph,
 #' @export
 #'
 #' @examples
-vulnerabilty_signature <- function(graph,
+vulnerability_signature <- function(graph,
                                    membership,
                                    weights = NULL) {
 
