@@ -13,7 +13,7 @@ ideation_signature <- function(graph, weights = NULL) {
   1 / graph %>%
     igraph::constraint(nodes = igraph::V(graph),
                        weights = weights) %>%
-    ifelse(is.na(.), 1, .)
+    ifelse(is.na(.) | . == 0, 1, .)
 }
 
 #' Extract Influence Signature
