@@ -238,7 +238,7 @@ This measure of vulnerability counts how many connections a vertex has to vertic
 ```{r, warning = FALSE, message = FALSE}
 # Get measure
 igraph::V(example_graph)$vulnerability <- example_graph %>% 
-  hrgraphsign::vulnerabilty_signature(., membership = department)
+  hrgraphsign::vulnerability_signature(., membership = department)
 
 # Visualize
 set.seed(5)
@@ -259,7 +259,7 @@ ggraph(example_graph, layout = 'fr') +
 igraph::V(example_graph)$cluster <- igraph::cluster_fast_greedy(igraph::as.undirected(example_graph))$membership
 
 igraph::V(example_graph)$vulnerability <- example_graph %>% 
-  hrgraphsign::vulnerabilty_signature(., membership = cluster)
+  hrgraphsign::vulnerability_signature(., membership = cluster)
 
 # Visualize
 set.seed(5)
@@ -274,7 +274,7 @@ ggraph(example_graph, layout = 'fr') +
 #### Plot friends_friends
 
 ```{r, warning = FALSE, message = FALSE}
-# Make a subgraph of vertice 13 and neighburs 2 steps away
+# Make a subgraph of vertice 13 and neighbors 2 steps away
 subgraph <- hrgraphsign::friends_friends(example_graph, vertices = 13, n_steps = 2)
 set.seed(5)
 ggraph(subgraph, layout = 'fr') + 
