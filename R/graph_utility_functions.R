@@ -7,7 +7,7 @@
 #'
 #' @examples
 aggregate_edges <- function(graph) {
-  igraph::E(graph)$weights <- igraph::count_multiple(graph)
+  igraph::E(graph)$weight <- igraph::count_multiple(graph)
   graph <- igraph::simplify(graph, remove.loops = TRUE, edge.attr.comb = "first")
   return(graph)
 }
