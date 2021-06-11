@@ -151,5 +151,5 @@ vulnerability_signature <- function(graph,
    graph <- graph - igraph::induced_subgraph(graph, membership == team)
  }
 
- unlist(igraph::degree(graph))
+ unlist(igraph::strength(graph, weights = weights))
 }
