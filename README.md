@@ -98,9 +98,9 @@ hrgraphsign::get_top_by_column(example_graph, column = "ideation", n = 3) %>%
 
 |     | firstName | lastName | ideation |
 |:----|:----------|:---------|---------:|
-| 17  | quentin   | quitter  | 5.000000 |
-| 21  | urban     | undilat  | 4.072398 |
-| 13  | martin    | mustig   | 4.000000 |
+| 17  | quentin   | quitter  |      4.5 |
+| 13  | martin    | mustig   |      4.0 |
+| 15  | olof      | otur     |      4.0 |
 
 #### Influence Signature
 
@@ -122,9 +122,9 @@ hrgraphsign::get_top_by_column(example_graph, column = "influence", n = 3) %>%
 
 |     | firstName | lastName | influence | ideation |
 |:----|:----------|:---------|----------:|---------:|
-| 19  | sara      | sommar   |  0.108950 | 3.353169 |
-| 13  | martin    | mustig   |  0.081936 | 4.000000 |
-| 24  | xenon     | xor      |  0.075769 | 3.810756 |
+| 24  | xenon     | xor      |  0.113442 | 3.360392 |
+| 19  | sara      | sommar   |  0.085714 | 3.482800 |
+| 13  | martin    | mustig   |  0.068187 | 4.000000 |
 
 #### Comparison
 
@@ -285,7 +285,7 @@ to vertices outside the team.
 ``` r
 # Get measure
 igraph::V(example_graph)$vulnerability <- example_graph %>% 
-  hrgraphsign::vulnerabilty_signature(., membership = department)
+  hrgraphsign::vulnerability_signature(., membership = department)
 
 # Visualize
 set.seed(5)
@@ -308,7 +308,7 @@ ggraph(example_graph, layout = 'fr') +
 igraph::V(example_graph)$cluster <- igraph::cluster_fast_greedy(igraph::as.undirected(example_graph))$membership
 
 igraph::V(example_graph)$vulnerability <- example_graph %>% 
-  hrgraphsign::vulnerabilty_signature(., membership = cluster)
+  hrgraphsign::vulnerability_signature(., membership = cluster)
 
 # Visualize
 set.seed(5)

@@ -13,7 +13,7 @@ ideation_signature <- function(graph, weights = NULL) {
   1 / graph %>%
     igraph::constraint(nodes = igraph::V(graph),
                        weights = weights) %>%
-    ifelse(is.na(.), 1, .)
+    ifelse(is.na(.) | . == 0, 1, .)
 }
 
 #' Extract Influence Signature
@@ -141,7 +141,7 @@ silo_quotient <- function(graph,
 #' @export
 #'
 #' @examples
-vulnerabilty_signature <- function(graph,
+vulnerability_signature <- function(graph,
                                    membership,
                                    weights = NULL) {
 
@@ -151,5 +151,5 @@ vulnerabilty_signature <- function(graph,
    graph <- graph - igraph::induced_subgraph(graph, membership == team)
  }
 
- unlist(igraph::degree(graph))
+ unlist(igraph::strength(graph, weights = weights))
 }
