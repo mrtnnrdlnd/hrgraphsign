@@ -2,7 +2,7 @@
 #' Extract Ideation Signature
 #'
 #' @param graph Graph to analyze
-#' @param weights A string that specifies attribute representing weights of the graph
+#' @param weights Weight vector. If the graph has a weight edge attribute, then this is used by default.
 #'
 #' @return Igraph column with values of ideation on a scale from 1 to 10
 #' @importFrom dplyr %>% .data
@@ -21,7 +21,7 @@ ideation_signature <- function(graph, weights = NULL) {
 #' This is a fishy implementation of influence
 #'
 #' @param graph Graph to analyze
-#' @param weights A string that specifies attribute representing weights of the graph
+#' @param weights Weight vector. If the graph has a weight edge attribute, then this is used by default.
 #'
 #' @return Igraph column with values of influence on a scale from 1 to 10
 #' @export
@@ -98,7 +98,7 @@ innovation_signature <- function(graph, team_graph, range_param = 2) {
 #'
 #' @param graph The input graph.
 #' @param membership Vertex attribute to cluster by.
-#' @param weights If not NULL then a numeric vector giving edge weights.
+#' @param weights Weight vector. If the graph has a weight edge attribute, then this is used by default.
 #'
 #' @return Silo signature measure of graph (aka modularity)
 #' @export
@@ -116,7 +116,7 @@ silo_signature <- function(graph,
 #' Extract Silo Quotient
 #'
 #' @param graph The input graph
-#' @param membership Character vector, for each vertex it gives its community.
+#' @param team_graph Subgraph with only team members.
 #'
 #' @return A tibble with the teams silo quotients
 #' @export
@@ -135,7 +135,7 @@ silo_quotient <- function(graph,
 #'
 #' @param graph The input graph.
 #' @param membership Vertex attribute to cluster by.
-#' @param weights If not NULL then a numeric vector giving edge weights.
+#' @param weights Weight vector. If the graph has a weight edge attribute, then this is used by default.
 #'
 #' @return A tibble of vertices with high vulnerability score
 #' @export
