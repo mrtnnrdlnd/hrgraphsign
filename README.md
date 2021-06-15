@@ -325,7 +325,7 @@ ggraph(example_graph, layout = 'fr') +
 #### Plot friends\_friends
 
 ``` r
-# Make a subgraph of vertice 13 and neighburs 2 steps away
+# Make a subgraph of vertice 13 and neighbors 2 steps away
 subgraph <- hrgraphsign::friends_friends(example_graph, vertices = 13, n_steps = 2)
 set.seed(5)
 ggraph(subgraph, layout = 'fr') + 
