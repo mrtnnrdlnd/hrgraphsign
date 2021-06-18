@@ -122,9 +122,9 @@ hrgraphsign::get_top_by_column(example_graph, column = "influence", n = 3) %>%
 
 |     | firstName | lastName | influence | ideation |
 |:----|:----------|:---------|----------:|---------:|
-| 24  | xenon     | xor      |  0.113442 | 3.360392 |
-| 19  | sara      | sommar   |  0.085714 | 3.482800 |
-| 13  | martin    | mustig   |  0.068187 | 4.000000 |
+| 19  | sara      | sommar   | 1.0000000 | 3.482800 |
+| 28  | ängbert   | ärlig    | 0.9645710 | 2.687151 |
+| 24  | xenon     | xor      | 0.8676435 | 3.360392 |
 
 #### Comparison
 

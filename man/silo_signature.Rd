@@ -11,7 +11,7 @@ silo_signature(graph, membership, weights = NULL)
 
 \item{membership}{Vertex attribute to cluster by.}
 
-\item{weights}{If not NULL then a numeric vector giving edge weights.}
+\item{weights}{Weight vector. If the graph has a weight edge attribute, then this is used by default.}
 }
 \value{
 Silo signature measure of graph (aka modularity)

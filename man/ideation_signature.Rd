@@ -9,7 +9,7 @@ ideation_signature(graph, weights = NULL)
 \arguments{
 \item{graph}{Graph to analyze}
 
-\item{weights}{A string that specifies attribute representing weights of the graph}
+\item{weights}{Weight vector. If the graph has a weight edge attribute, then this is used by default.}
 }
 \value{
 Igraph column with values of ideation on a scale from 1 to 10
