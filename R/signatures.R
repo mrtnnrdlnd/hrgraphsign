@@ -4,7 +4,7 @@
 #' @param graph Graph to analyze
 #' @param weights Weight vector. If the graph has a weight edge attribute, then this is used by default.
 #'
-#' @return Igraph column with values of ideation on a scale from 1 to 10
+#' @return Igraph column with values of ideation
 #' @importFrom dplyr %>% .data
 #' @export
 #'
@@ -18,31 +18,33 @@ ideation_signature <- function(graph, weights = NULL) {
 
 #' Extract Influence Signature
 #'
-#' This is a fishy implementation of influence
-#'
 #' @param graph Graph to analyze
 #' @param weights Weight vector. If the graph has a weight edge attribute, then this is used by default.
 #'
-#' @return Igraph column with values of influence on a scale from 1 to 10
+#' @return Igraph column with values of influence
 #' @export
 #'
 #' @examples
-influence_signature <- function(graph, weights = NULL) {
-  if_is_directed <- igraph::is_directed(graph)
+influence_signature <- function(graph, weights = NULL, damping = 0.85) {
 
-  graph_betweeness <- graph %>%
-    igraph::betweenness(v = igraph::V(graph),
-                        directed = if_is_directed,
-                        normalized = TRUE,
-                        weights = weights
-                        )
+  if (igraph::is_directed(graph)) {
+    nodes <- igraph::as_data_frame(graph, what = "vertices")
+    edges <- igraph::as_data_frame(graph, what = "edges") %>%
+      dplyr::mutate(temp = from, from = to, to = temp) %>%
+      dplyr::select(-temp)
+    graph <- igraph::graph_from_data_frame(edges, nodes,
+                                           directed = TRUE)
 
-  graph_eigen_centrality <- (graph %>%
-    igraph::eigen_centrality(weights = weights,
-                             directed = if_is_directed,
-                             ))$vector
+    influence <- igraph::page_rank(graph,
+                                   directed = TRUE,
+                                   weights = weights,
+                                   damping = damping)$vector
+  } else {
+    influence <- (igraph::eigen_centrality(graph,
+                                           weights = weights))$vector
+  }
 
-  round((graph_betweeness * graph_eigen_centrality), digits = 6)
+  influence
 }
 
 
