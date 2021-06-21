@@ -12,8 +12,8 @@ influence_signature(graph, weights = NULL, damping = 0.85)
 \item{weights}{Weight vector. If the graph has a weight edge attribute, then this is used by default.}
 }
 \value{
-Igraph column with values of influence on a scale from 1 to 10
+Igraph column with values of influence
 }
 \description{
-This is a fishy implementation of influence
+Extract Influence Signature
 }
