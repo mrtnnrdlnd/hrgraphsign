@@ -12,7 +12,7 @@ ideation_signature(graph, weights = NULL)
 \item{weights}{Weight vector. If the graph has a weight edge attribute, then this is used by default.}
 }
 \value{
-Igraph column with values of ideation on a scale from 1 to 10
+Igraph column with values of ideation
 }
 \description{
 Extract Ideation Signature
