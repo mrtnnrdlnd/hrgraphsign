@@ -1,8 +1,8 @@
 
 # hrgraphsign
 
-    Simplifies analysis of hr-graph data based on the six signatures
-    from this article: https://hbr.org/2018/11/better-people-analytics
+Simplifies analysis of hr-graph data based on the six signatures from
+this article: <https://hbr.org/2018/11/better-people-analytics>
 
 ## Installation
 
@@ -123,7 +123,7 @@ hrgraphsign::get_top_by_column(example_graph, column = "influence", n = 3) %>%
 |     | firstName | lastName | influence | ideation |
 |:----|:----------|:---------|----------:|---------:|
 | 19  | sara      | sommar   | 1.0000000 | 3.482800 |
-| 28  | ängbert   | ärlig    | 0.9645710 | 2.687151 |
+| 28  | ängbert   | ärlig    | 0.9645712 | 2.687151 |
 | 24  | xenon     | xor      | 0.8676435 | 3.360392 |
 
 #### Comparison
