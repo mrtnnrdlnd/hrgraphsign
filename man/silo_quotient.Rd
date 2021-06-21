@@ -9,7 +9,7 @@ silo_quotient(graph, team_graph)
 \arguments{
 \item{graph}{The input graph}
 
-\item{membership}{Character vector, for each vertex it gives its community.}
+\item{team_graph}{Subgraph with only team members.}
 }
 \value{
 A tibble with the teams silo quotients
